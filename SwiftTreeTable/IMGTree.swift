@@ -100,7 +100,13 @@ class IMGTreeNode: NSObject, NSCoding {
             return currentNode
         }
     }
-    var isVisible: Bool
+    var isVisible: Bool {
+        didSet {
+            if isVisible != oldValue {
+                NSNotificationCenter.defaultCenter().postNotificationName("isVisibleChanged", object: self)
+            }
+        }
+    }
     
     //MARK: Initializers
     
@@ -168,12 +174,15 @@ class IMGTreeNode: NSObject, NSCoding {
         return traversal[index] ?? nil
     }
     
+    func visibleTraversalIndex() -> Int? {
+        return rootNode.visibleIndexForNode(self)
+    }
+    
     //MARK: Private
     
     private func traversalIndex() -> Int? {
         return rootNode.indexForNode(self)
     }
-    
     
     private func infixTraversal(visible: Bool = true) -> [IMGTreeNode] {
         
