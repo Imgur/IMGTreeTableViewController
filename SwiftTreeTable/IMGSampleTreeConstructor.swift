@@ -10,6 +10,10 @@ import UIKit
 
 class IMGCommentNode: IMGTreeNode {
     var comment: String?
+    
+    override var description : String {
+        return "Node: \(comment)"
+    }
 }
 
 class IMGCommentModel : NSObject {

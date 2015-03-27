@@ -27,7 +27,7 @@ class IMGTree: NSObject, NSCoding {
             let rootNode = nodeClass(parentNode: tree.rootNode)
             constructorDelegate.configureNode(rootNode, modelObject: rootObject)
             if let childObjects = constructorDelegate.childrenForNodeObject(rootObject) {
-                rootNode.children = IMGTree.process(tree.rootNode, childObjects: childObjects, tree: tree, constructorDelegate: constructorDelegate) as [IMGTreeNode]?
+                rootNode.children = IMGTree.process(tree.rootNode, childObjects: childObjects, tree: tree, constructorDelegate: constructorDelegate) as [IMGTreeNode]
             }
             childNodes.append(rootNode)
         }
@@ -46,7 +46,7 @@ class IMGTree: NSObject, NSCoding {
             let childNode = nodeClass(parentNode: parentNode)
             constructorDelegate.configureNode(childNode, modelObject: childObject)
             if let childObjects = constructorDelegate.childrenForNodeObject(childObject) {
-                childNode.children = IMGTree.process(tree.rootNode, childObjects: childObjects, tree: tree, constructorDelegate: constructorDelegate) as [IMGTreeNode]?
+                childNode.children = IMGTree.process(tree.rootNode, childObjects: childObjects, tree: tree, constructorDelegate: constructorDelegate) as [IMGTreeNode]
             }
             childNodes.append(childNode)
         }
@@ -63,14 +63,26 @@ class IMGTree: NSObject, NSCoding {
     func encodeWithCoder(aCoder: NSCoder) {
         
     }
+    
+    //MARK: DebugPrintable
+    
+    override var description : String {
+        var tableState = "Tree: rootnode: \(rootNode.description)\n"
+
+        for node in rootNode.infixTraversal() {
+            tableState += "\(node.description)\n"
+        }
+
+        return tableState
+    }
 }
 
 class IMGTreeNode: NSObject, NSCoding {
     
     weak var parentNode: IMGTreeNode?
-    var children: [IMGTreeNode]? {
+    var children: [IMGTreeNode] {
         didSet {
-            children = children?.map({ (var node: IMGTreeNode) -> IMGTreeNode in
+            children = children.map({ (var node: IMGTreeNode) -> IMGTreeNode in
                 node.parentNode = self
                 return node
             })
@@ -79,13 +91,13 @@ class IMGTreeNode: NSObject, NSCoding {
     
     var rootNode: IMGTreeNode {
         get {
-            var currentNode: IMGTreeNode? = self
+            var currentNode: IMGTreeNode = self
             
-            while currentNode != nil {
-                currentNode = currentNode!.parentNode
+            while currentNode.parentNode != nil {
+                currentNode = currentNode.parentNode!
             }
             
-            return currentNode!
+            return currentNode
         }
     }
     var isVisible: Bool
@@ -94,11 +106,13 @@ class IMGTreeNode: NSObject, NSCoding {
     
     override init() {
         isVisible = false
+        children = []
     }
     
     required convenience init (parentNode nodesParent: IMGTreeNode) {
         self.init()
         parentNode = nodesParent
+        children = []
     }
     
     //MARK: NSCoding
@@ -114,19 +128,12 @@ class IMGTreeNode: NSObject, NSCoding {
     //MARK: Public
     
     func addChild(child: IMGTreeNode) {
-        if var childNodes = children {
-            childNodes += [child]
-            
-            // Ensure didSet gets called
-            children = childNodes
-        }
+        children += [child]
     }
     
     func removeChild(child: IMGTreeNode) {
-        if var childNodes = children {
-            if let targetIndex = find(childNodes, child) {
-                children!.removeAtIndex(targetIndex)
-            }
+        if let targetIndex = find(children, child) {
+            children.removeAtIndex(targetIndex)
         }
     }
     
@@ -139,47 +146,71 @@ class IMGTreeNode: NSObject, NSCoding {
     }
     
     func indexForNode(node: IMGTreeNode) -> Int? {
-        if let traversal = infixTraversal() {
-            return find(traversal, node)
-        }
-        
-        return nil
+        var traversal = infixTraversal(visible: false)
+        return find(traversal, node)
     }
     
-    func traversalIndex() -> Int? {
-        return rootNode.indexForNode(self)
+    func visibleIndexForNode(node: IMGTreeNode) -> Int? {
+        var traversal = infixTraversal()
+        return find(traversal, node)
+    }
+    
+    func visibleTraversalCount() -> Int {
+        return infixTraversal().count ?? 0
+    }
+    
+    func traversalCount() -> Int {
+        return infixTraversal(visible: false).count ?? 0
+    }
+    
+    func visibleNodeForIndex(index: Int) -> IMGTreeNode? {
+        let traversal = rootNode.infixTraversal()
+        return traversal[index] ?? nil
     }
     
     //MARK: Private
     
-    private func infixTraversal() -> [IMGTreeNode]? {
-        var traversal: [IMGTreeNode] = []
-        if let childNodes = children {
+    private func traversalIndex() -> Int? {
+        return rootNode.indexForNode(self)
+    }
+    
+    
+    private func infixTraversal(visible: Bool = true) -> [IMGTreeNode] {
+        
+        var traversal = { (childNodes: [IMGTreeNode]) -> [IMGTreeNode] in
+            var traversal: [IMGTreeNode] = []
             for node in childNodes {
                 traversal.append(node)
-                
-                if let childTraversal = node.infixTraversal() {
-                    traversal.extend(childTraversal)
-                }
+                traversal.extend(node.infixTraversal(visible: visible))
             }
             
             return traversal
         }
         
-        return nil
+        if visible {
+            var childNodes = children.filter({ (node: IMGTreeNode) -> Bool in
+                return node.isVisible
+            })
+            return traversal(childNodes)
+        } else {
+            return traversal(children)
+        }
     }
     
     private func findChildNode(ofClass: AnyClass) -> IMGTreeNode? {
-        if let childNodes = children {
-            let filtered = childNodes.filter({ (node) -> Bool in
-                return node.isKindOfClass(ofClass)
-            })
-            
-            return filtered.first
-        }
+        let filtered = children.filter({ (node) -> Bool in
+            return node.isKindOfClass(ofClass)
+        })
         
-        return nil
+        return filtered.first
     }
+    
+    //MARK: DebugPrintable
+    
+    override var description : String {
+        return "Node: \(rootNode.indexForNode(self)) \n"
+    }
+
 }
 
 class IMGTreeSelectionNode {
