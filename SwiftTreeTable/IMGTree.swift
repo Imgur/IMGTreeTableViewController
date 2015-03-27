@@ -101,12 +101,16 @@ class IMGTreeNode: NSObject, NSCoding {
         }
     }
     var isVisible: Bool {
+        willSet {
+            previousVisibleIndex = visibleTraversalIndex()
+        }
         didSet {
             if isVisible != oldValue {
                 NSNotificationCenter.defaultCenter().postNotificationName("isVisibleChanged", object: self)
             }
         }
     }
+    var previousVisibleIndex: Int?
     
     //MARK: Initializers
     

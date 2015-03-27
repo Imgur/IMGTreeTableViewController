@@ -58,8 +58,14 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     
     func setNodeChildrenVisiblility(node: IMGTreeNode, visibility: Bool) {
         
-        for child in node.children {
-            child.isVisible = visibility
+        if !visibility {
+            for child in reverse(node.children) {
+                child.isVisible = visibility
+            }
+        } else {
+            for child in node.children {
+                child.isVisible = true
+            }
         }
     }
     
@@ -83,6 +89,9 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     }
     
     func commit() {
+        
+        tableView.beginUpdates()
+        
         var addedIndices: [NSIndexPath] = []
         for node in insertedNodes {
             if let rowIndex = node.visibleTraversalIndex() {
@@ -94,12 +103,15 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         
         var deletedIndices: [NSIndexPath] = []
         for node in deletedNodes {
-            if let rowIndex = node.visibleTraversalIndex() {
+            if let rowIndex = node.previousVisibleIndex {
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
                 deletedIndices.append(indexPath)
             }
         }
         tableView.deleteRowsAtIndexPaths(deletedIndices, withRowAnimation: .Top)
+        
+        
+        tableView.endUpdates()
     }
     
 
