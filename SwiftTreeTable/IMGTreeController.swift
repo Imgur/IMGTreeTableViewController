@@ -98,6 +98,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
                 addedIndices.append(indexPath)
             }
+            addedIndices.extend(node.indicesForTraversal())
         }
         tableView.insertRowsAtIndexPaths(addedIndices, withRowAnimation: .Top)
         
@@ -107,6 +108,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
                 deletedIndices.append(indexPath)
             }
+            deletedIndices.extend(node.previousVisibleChildren!)
         }
         tableView.deleteRowsAtIndexPaths(deletedIndices, withRowAnimation: .Top)
         

@@ -103,6 +103,12 @@ class IMGTreeNode: NSObject, NSCoding {
     var isVisible: Bool {
         willSet {
             previousVisibleIndex = visibleTraversalIndex()
+            if isVisible {
+                
+                previousVisibleChildren = indicesForTraversal()
+            } else {
+                previousVisibleChildren = []
+            }
         }
         didSet {
             if isVisible != oldValue {
@@ -111,6 +117,7 @@ class IMGTreeNode: NSObject, NSCoding {
         }
     }
     var previousVisibleIndex: Int?
+    var previousVisibleChildren: [NSIndexPath]?
     
     //MARK: Initializers
     
@@ -180,6 +187,14 @@ class IMGTreeNode: NSObject, NSCoding {
     
     func visibleTraversalIndex() -> Int? {
         return rootNode.visibleIndexForNode(self)
+    }
+    
+    func indicesForTraversal() -> [NSIndexPath] {
+        let traversal = infixTraversal()
+
+        return traversal.map({ (node: IMGTreeNode) -> NSIndexPath in
+            return NSIndexPath(forRow: node.visibleTraversalIndex()!, inSection: 0)
+        })
     }
     
     //MARK: Private
