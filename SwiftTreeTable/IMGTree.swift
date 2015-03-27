@@ -89,6 +89,16 @@ class IMGTreeNode: NSObject, NSCoding {
         }
     }
     
+    var isSelected: Bool {
+        get {
+            for node in children {
+                if node.isKindOfClass(IMGTreeSelectionNode) {
+                    return true
+                }
+            }
+            return false
+        }
+    }
     var rootNode: IMGTreeNode {
         get {
             var currentNode: IMGTreeNode = self
@@ -126,8 +136,8 @@ class IMGTreeNode: NSObject, NSCoding {
         children = []
     }
     
-    required convenience init (parentNode nodesParent: IMGTreeNode) {
-        self.init()
+    required init (parentNode nodesParent: IMGTreeNode) {
+        isVisible = false
         parentNode = nodesParent
         children = []
     }
@@ -145,7 +155,12 @@ class IMGTreeNode: NSObject, NSCoding {
     //MARK: Public
     
     func addChild(child: IMGTreeNode) {
-        children += [child]
+        if child.isKindOfClass(IMGTreeSelectionNode) {
+            children.insert(child, atIndex: 0)
+            child.parentNode = self
+        } else {
+            children += [child]
+        }
     }
     
     func removeChild(child: IMGTreeNode) {
@@ -241,7 +256,18 @@ class IMGTreeNode: NSObject, NSCoding {
 
 }
 
-class IMGTreeSelectionNode {
+/**
+Class for nodes that represent user 'selection' of a parent node
+*/
+class IMGTreeSelectionNode : IMGTreeNode {
+    required init(parentNode: IMGTreeNode) {
+        super.init(parentNode: parentNode)
+//        isVisible = true
+    }
+    
+    required convenience init(coder aDecoder: NSCoder) {
+        self.init(parentNode: IMGTreeNode())
+    }
     
 }
 

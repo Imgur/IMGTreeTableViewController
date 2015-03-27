@@ -56,6 +56,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     
     //MARK: Public
     
+    
     func setNodeChildrenVisiblility(node: IMGTreeNode, visibility: Bool) {
         
         if !visibility {
@@ -71,13 +72,25 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     
     func didSelectRow(indexPath: NSIndexPath) {
         if let node = tree?.rootNode.visibleNodeForIndex(indexPath.row) {
-            transactionInProgress = true
-            setNodeChildrenVisiblility(node, visibility: node.children.first?.isVisible != true ?? false)
-            transactionInProgress = false
+            if !node.isKindOfClass(IMGTreeSelectionNode) && !node.isKindOfClass(IMGTreeActionNode) {
+                transactionInProgress = true
+                addSelectionNodeIfNecessary(node)
+                setNodeChildrenVisiblility(node, visibility: node.children.first?.isVisible != true ?? false)
+                transactionInProgress = false
+            }
         }
     }
     
+    
     //MARK: Private
+    
+    func addSelectionNodeIfNecessary(parentNode: IMGTreeNode) {
+        
+        if !parentNode.isSelected {
+            let selectionNode = IMGTreeSelectionNode(parentNode: parentNode)
+            parentNode.addChild(selectionNode)
+        }
+    }
     
     func visibilityChanged(notification: NSNotification!) {
         let node = notification.object! as IMGTreeNode
