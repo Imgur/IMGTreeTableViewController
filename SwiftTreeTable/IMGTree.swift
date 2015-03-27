@@ -1,5 +1,12 @@
 import UIKit
 
+protocol IMGTreeConstructorDelegate : class {
+    func childrenForNodeObject(object: AnyObject) -> [AnyObject]?
+    func configureNode(node: IMGTreeNode, modelObject: AnyObject)
+    func classForNode() -> IMGTreeNode.Type
+}
+
+@objc(IMGTree)
 class IMGTree: NSObject, NSCoding {
     
     let rootNode:IMGTreeNode
@@ -7,6 +14,47 @@ class IMGTree: NSObject, NSCoding {
     override init() {
         rootNode = IMGTreeNode()
     }
+    
+    //MARK: tree construction class methods
+    
+    class func tree(fromRootArray rootArray: [AnyObject], withConstructerDelegate constructorDelegate: IMGTreeConstructorDelegate) -> IMGTree
+    {
+        let tree = IMGTree()
+        let nodeClass = constructorDelegate.classForNode()
+        var childNodes: [IMGTreeNode] = []
+        
+        for rootObject in rootArray {
+            let rootNode = nodeClass(parentNode: tree.rootNode)
+            constructorDelegate.configureNode(rootNode, modelObject: rootObject)
+            if let childObjects = constructorDelegate.childrenForNodeObject(rootObject) {
+                rootNode.children = IMGTree.process(tree.rootNode, childObjects: childObjects, tree: tree, constructorDelegate: constructorDelegate) as [IMGTreeNode]?
+            }
+            childNodes.append(rootNode)
+        }
+        
+        if !childNodes.isEmpty {
+            tree.rootNode.children = childNodes
+        }
+        return tree
+    }
+    
+    private class func process(parentNode: IMGTreeNode, childObjects: [AnyObject], tree: IMGTree, constructorDelegate: IMGTreeConstructorDelegate) -> [AnyObject]? {
+        
+        let nodeClass = constructorDelegate.classForNode()
+        var childNodes: [IMGTreeNode] = []
+        for childObject in childObjects {
+            let childNode = nodeClass(parentNode: parentNode)
+            constructorDelegate.configureNode(childNode, modelObject: childObject)
+            if let childObjects = constructorDelegate.childrenForNodeObject(childObject) {
+                childNode.children = IMGTree.process(tree.rootNode, childObjects: childObjects, tree: tree, constructorDelegate: constructorDelegate) as [IMGTreeNode]?
+            }
+            childNodes.append(childNode)
+        }
+        
+        return childNodes
+    }
+    
+    //MARK: NSCoding
  
     required convenience init(coder aDecoder: NSCoder) {
         self.init()
@@ -28,6 +76,7 @@ class IMGTreeNode: NSObject, NSCoding {
             })
         }
     }
+    
     var rootNode: IMGTreeNode {
         get {
             var currentNode: IMGTreeNode? = self
@@ -45,6 +94,11 @@ class IMGTreeNode: NSObject, NSCoding {
     
     override init() {
         isVisible = false
+    }
+    
+    required convenience init (parentNode nodesParent: IMGTreeNode) {
+        self.init()
+        parentNode = nodesParent
     }
     
     //MARK: NSCoding
