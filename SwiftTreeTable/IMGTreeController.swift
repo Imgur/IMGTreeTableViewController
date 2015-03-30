@@ -87,6 +87,16 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         }
     }
     
+    func didTriggerActionFromIndex(indexPath: NSIndexPath) {
+        if let node = tree?.rootNode.visibleNodeForIndex(indexPath.row) {
+            if !node.isKindOfClass(IMGTreeActionNode) {
+                transactionInProgress = true
+                addActionNode(node)
+                transactionInProgress = false
+            }
+        }
+    }
+    
     //MARK: Private
     
     func addSelectionNodeIfNecessary(parentNode: IMGTreeNode) -> Bool {
@@ -108,6 +118,19 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         } else {
             return true
         }
+    }
+    
+    func addActionNode(parentNode: IMGTreeNode) {
+        
+        if self.actionNode != nil {
+            
+            //hide previous selection node
+            self.actionNode?.removeFromParent()
+        }
+        
+        self.actionNode = IMGTreeActionNode(parentNode: parentNode)
+        parentNode.addChild(self.actionNode!)
+        self.actionNode?.isVisible = true
     }
     
     func visibilityChanged(notification: NSNotification!) {

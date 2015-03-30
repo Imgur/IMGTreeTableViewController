@@ -185,6 +185,11 @@ class IMGTreeNode: NSObject, NSCoding {
         }
     }
     
+    func removeFromParent() {
+        isVisible = false
+        parentNode?.removeChild(self)
+    }
+    
     func hasSelectionNode() -> Bool {
         return findChildNode(IMGTreeSelectionNode) != nil
     }
@@ -222,9 +227,6 @@ class IMGTreeNode: NSObject, NSCoding {
     
     func indicesForTraversal() -> [NSIndexPath] {
         let traversal = infixTraversal()
-//        let filtered = traversal.filter({(node: IMGTreeNode) -> Bool in
-//            return !node.isKindOfClass(IMGTreeSelectionNode)
-//        })
         return traversal.map({ (node: IMGTreeNode) -> NSIndexPath in
             return NSIndexPath(forRow: node.visibleTraversalIndex()!, inSection: 0)
         })
@@ -288,22 +290,9 @@ class IMGTreeNode: NSObject, NSCoding {
 Class for nodes that represent user 'selection' of a parent node
 */
 class IMGTreeSelectionNode : IMGTreeNode {
-    required init(parentNode: IMGTreeNode) {
-        super.init(parentNode: parentNode)
-//        isVisible = true
-    }
-    
-    required convenience init(coder aDecoder: NSCoder) {
-        self.init(parentNode: IMGTreeNode())
-    }
-    
-    func removeFromParent() {
-        isVisible = false
-        parentNode?.removeChild(self)
-    }
+
 }
 
-class IMGTreeActionNode {
-    
-    
+class IMGTreeActionNode : IMGTreeNode {
+
 }

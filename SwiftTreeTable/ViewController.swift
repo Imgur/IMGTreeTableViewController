@@ -24,10 +24,18 @@ class ViewController: UITableViewController, IMGTreeControllerDelegate {
     
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as UITableViewCell
-        if let commentNode = node as? IMGCommentNode {
+        switch node {
+        case is IMGCommentNode:
+            let commentNode = node as IMGCommentNode
             cell.textLabel?.text = commentNode.comment
-        } else {
+        case is IMGTreeSelectionNode:
             cell.textLabel?.text = "selection"
+            cell.accessoryType = UITableViewCellAccessoryType.DetailButton
+        case is IMGTreeActionNode:
+            cell.textLabel?.text = "action"
+            cell.accessoryType = UITableViewCellAccessoryType.DetailButton
+        default:
+            break
         }
         return cell
     }
@@ -38,6 +46,10 @@ class ViewController: UITableViewController, IMGTreeControllerDelegate {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         controller.didSelectRow(indexPath)
+    }
+    
+    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
+        controller.didTriggerActionFromIndex(indexPath)
     }
 }
 
