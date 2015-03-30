@@ -81,8 +81,6 @@ class IMGTreeController: NSObject, UITableViewDataSource{
                 transactionInProgress = true
                 if addSelectionNodeIfNecessary(node) {
                     setNodeChildrenVisiblility(node, visibility: !node.isChildrenVisible)
-                } else {
-                    println("prevented child toggling at node: \(node.visibleTraversalIndex()?.description)")
                 }
                 transactionInProgress = false
             }
