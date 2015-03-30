@@ -77,7 +77,7 @@ class IMGTree: NSObject, NSCoding {
     }
 }
 
-class IMGTreeNode: NSObject, NSCoding {
+class IMGTreeNode: NSObject, NSCoding, NSCopying {
     
     weak var parentNode: IMGTreeNode?
     var children: [IMGTreeNode] {
@@ -98,6 +98,17 @@ class IMGTreeNode: NSObject, NSCoding {
             }
             return false
         }
+    }
+    var depth: Int {
+        var currentNode: IMGTreeNode = self
+        var depth = 0
+        
+        while currentNode.parentNode != nil {
+            currentNode = currentNode.parentNode!
+            depth++
+        }
+        
+        return depth
     }
     var isChildrenVisible: Bool {
         get {
@@ -283,7 +294,16 @@ class IMGTreeNode: NSObject, NSCoding {
     override var description : String {
         return "Node: \(rootNode.indexForNode(self)) \n"
     }
-
+    
+    //MARK: NSCopying
+    
+    func copyWithZone(zone: NSZone) -> AnyObject {
+        let nodeCopy = IMGTreeNode()
+        nodeCopy.parentNode = parentNode
+        nodeCopy.children = children
+        nodeCopy.isVisible = isVisible
+        return nodeCopy
+    }
 }
 
 /**
@@ -295,4 +315,8 @@ class IMGTreeSelectionNode : IMGTreeNode {
 
 class IMGTreeActionNode : IMGTreeNode {
 
+}
+
+class IMGTreeCollapsedSectionNode : IMGTreeNode {
+    
 }

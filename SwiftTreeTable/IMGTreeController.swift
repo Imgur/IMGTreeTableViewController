@@ -59,7 +59,6 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     
     //MARK: Public
     
-    
     func setNodeChildrenVisiblility(node: IMGTreeNode, visibility: Bool) {
         
         if !visibility {
