@@ -43,6 +43,9 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     var insertedNodes: [IMGTreeNode] = []
     var deletedNodes: [IMGTreeNode] = []
     
+    var selectionNode: IMGTreeSelectionNode?
+    var actionNode: IMGTreeActionNode?
+    
     //MARK: initializers
     
     required init(tableView: UITableView, delegate: IMGTreeControllerDelegate) {
@@ -61,7 +64,9 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         
         if !visibility {
             for child in reverse(node.children) {
-                child.isVisible = visibility
+                if !child.isKindOfClass(IMGTreeSelectionNode) {
+                    child.isVisible = visibility
+                }
             }
         } else {
             for child in node.children {
@@ -74,21 +79,36 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         if let node = tree?.rootNode.visibleNodeForIndex(indexPath.row) {
             if !node.isKindOfClass(IMGTreeSelectionNode) && !node.isKindOfClass(IMGTreeActionNode) {
                 transactionInProgress = true
-                addSelectionNodeIfNecessary(node)
-                setNodeChildrenVisiblility(node, visibility: node.children.first?.isVisible != true ?? false)
+                if addSelectionNodeIfNecessary(node) {
+                    setNodeChildrenVisiblility(node, visibility: !node.isChildrenVisible)
+                } else {
+                    println("prevented child toggling at node: \(node.visibleTraversalIndex()?.description)")
+                }
                 transactionInProgress = false
             }
         }
     }
     
-    
     //MARK: Private
     
-    func addSelectionNodeIfNecessary(parentNode: IMGTreeNode) {
-        
-        if !parentNode.isSelected {
-            let selectionNode = IMGTreeSelectionNode(parentNode: parentNode)
-            parentNode.addChild(selectionNode)
+    func addSelectionNodeIfNecessary(parentNode: IMGTreeNode) -> Bool {
+
+        if !parentNode.isSelected{
+            let needsChildToggling = parentNode.isSelectionNodeInVisibleTraversal() || parentNode.isChildrenVisible
+            
+            if self.selectionNode != nil {
+                
+                //hide previous selection node
+                self.selectionNode?.removeFromParent()
+            }
+            
+            self.selectionNode = IMGTreeSelectionNode(parentNode: parentNode)
+            parentNode.addChild(self.selectionNode!)
+            self.selectionNode?.isVisible = true
+            
+            return !needsChildToggling
+        } else {
+            return true
         }
     }
     
@@ -105,25 +125,25 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         
         tableView.beginUpdates()
         
-        var addedIndices: [NSIndexPath] = []
+        var addedIndices: NSMutableSet = NSMutableSet()
         for node in insertedNodes {
             if let rowIndex = node.visibleTraversalIndex() {
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
-                addedIndices.append(indexPath)
+                addedIndices.addObject(indexPath)
             }
-            addedIndices.extend(node.indicesForTraversal())
+            addedIndices.addObjectsFromArray(node.indicesForTraversal())
         }
-        tableView.insertRowsAtIndexPaths(addedIndices, withRowAnimation: .Top)
+        tableView.insertRowsAtIndexPaths(addedIndices.allObjects, withRowAnimation: .Top)
         
-        var deletedIndices: [NSIndexPath] = []
+        var deletedIndices: NSMutableSet = NSMutableSet()
         for node in deletedNodes {
             if let rowIndex = node.previousVisibleIndex {
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
-                deletedIndices.append(indexPath)
+                deletedIndices.addObject(indexPath)
             }
-            deletedIndices.extend(node.previousVisibleChildren!)
+            deletedIndices.addObjectsFromArray(node.previousVisibleChildren!)
         }
-        tableView.deleteRowsAtIndexPaths(deletedIndices, withRowAnimation: .Top)
+        tableView.deleteRowsAtIndexPaths(deletedIndices.allObjects, withRowAnimation: .Top)
         
         
         tableView.endUpdates()

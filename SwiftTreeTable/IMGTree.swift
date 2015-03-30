@@ -99,6 +99,22 @@ class IMGTreeNode: NSObject, NSCoding {
             return false
         }
     }
+    var isChildrenVisible: Bool {
+        get {
+            if children.count > 0{
+                if children.first!.isKindOfClass(IMGTreeSelectionNode) {
+                    if children.count > 1 {
+                        return children[1].isVisible
+                    } else {
+                        return false
+                    }
+                } else {
+                    return children[0].isVisible
+                }
+            }
+            return false
+        }
+    }
     var rootNode: IMGTreeNode {
         get {
             var currentNode: IMGTreeNode = self
@@ -206,10 +222,22 @@ class IMGTreeNode: NSObject, NSCoding {
     
     func indicesForTraversal() -> [NSIndexPath] {
         let traversal = infixTraversal()
-
+//        let filtered = traversal.filter({(node: IMGTreeNode) -> Bool in
+//            return !node.isKindOfClass(IMGTreeSelectionNode)
+//        })
         return traversal.map({ (node: IMGTreeNode) -> NSIndexPath in
             return NSIndexPath(forRow: node.visibleTraversalIndex()!, inSection: 0)
         })
+    }
+    
+    func isSelectionNodeInVisibleTraversal() -> Bool {
+        let traversal = infixTraversal()
+        for node in traversal {
+            if node.isKindOfClass(IMGTreeSelectionNode) {
+                return true
+            }
+        }
+        return false
     }
     
     //MARK: Private
@@ -269,8 +297,13 @@ class IMGTreeSelectionNode : IMGTreeNode {
         self.init(parentNode: IMGTreeNode())
     }
     
+    func removeFromParent() {
+        isVisible = false
+        parentNode?.removeChild(self)
+    }
 }
 
 class IMGTreeActionNode {
+    
     
 }
