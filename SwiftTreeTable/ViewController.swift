@@ -4,10 +4,11 @@ class ViewController: UITableViewController, IMGTreeControllerDelegate {
     
     var tree: IMGTree!
     var controller: IMGTreeController!
+    
+    let backgroundColors = [UIColor.greenColor(),UIColor.blueColor(),UIColor.yellowColor(),UIColor.redColor(),UIColor.purpleColor(),UIColor.grayColor(),UIColor.whiteColor()]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         let construction = IMGSampleTreeConstructor()
         tree = construction.sampleCommentTree()
@@ -34,9 +35,13 @@ class ViewController: UITableViewController, IMGTreeControllerDelegate {
         case is IMGTreeActionNode:
             cell.textLabel?.text = "action"
             cell.accessoryType = UITableViewCellAccessoryType.DetailButton
+        case is IMGTreeCollapsedSectionNode:
+            cell.textLabel?.text = "collapsed"
         default:
             break
         }
+        cell.backgroundColor = backgroundColors[(node.depth) % backgroundColors.count]
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
         return cell
     }
     

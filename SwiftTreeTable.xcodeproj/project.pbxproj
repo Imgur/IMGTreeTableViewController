@@ -13,9 +13,9 @@
 		24C3DE931AC4B617008E3087 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C3DE921AC4B617008E3087 /* Images.xcassets */; };
 		24C3DE961AC4B617008E3087 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24C3DE941AC4B617008E3087 /* LaunchScreen.xib */; };
 		24C3DEA21AC4B617008E3087 /* SwiftTreeTableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DEA11AC4B617008E3087 /* SwiftTreeTableTests.swift */; };
-		24C3DEAC1AC4B699008E3087 /* IMGTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DEAB1AC4B699008E3087 /* IMGTree.swift */; };
 		24C3DEAE1AC4B7A9008E3087 /* IMGTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DEAD1AC4B7A9008E3087 /* IMGTreeController.swift */; };
 		24C3DEB01AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */; };
+		24C8052C1ACB449800440864 /* IMGTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C8052B1ACB449800440864 /* IMGTree.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,9 +39,9 @@
 		24C3DE9B1AC4B617008E3087 /* SwiftTreeTableTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftTreeTableTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24C3DEA01AC4B617008E3087 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24C3DEA11AC4B617008E3087 /* SwiftTreeTableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTreeTableTests.swift; sourceTree = "<group>"; };
-		24C3DEAB1AC4B699008E3087 /* IMGTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGTree.swift; sourceTree = "<group>"; };
 		24C3DEAD1AC4B7A9008E3087 /* IMGTreeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGTreeController.swift; sourceTree = "<group>"; };
 		24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGSampleTreeConstructor.swift; sourceTree = "<group>"; };
+		24C8052B1ACB449800440864 /* IMGTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGTree.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,14 +84,14 @@
 			isa = PBXGroup;
 			children = (
 				24C3DE8B1AC4B617008E3087 /* AppDelegate.swift */,
-				24C3DE8D1AC4B617008E3087 /* ViewController.swift */,
-				24C3DEAB1AC4B699008E3087 /* IMGTree.swift */,
-				24C3DEAD1AC4B7A9008E3087 /* IMGTreeController.swift */,
-				24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */,
-				24C3DE8F1AC4B617008E3087 /* Main.storyboard */,
 				24C3DE921AC4B617008E3087 /* Images.xcassets */,
+				24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */,
+				24C8052B1ACB449800440864 /* IMGTree.swift */,
+				24C3DEAD1AC4B7A9008E3087 /* IMGTreeController.swift */,
 				24C3DE941AC4B617008E3087 /* LaunchScreen.xib */,
+				24C3DE8F1AC4B617008E3087 /* Main.storyboard */,
 				24C3DE891AC4B617008E3087 /* Supporting Files */,
+				24C3DE8D1AC4B617008E3087 /* ViewController.swift */,
 			);
 			path = SwiftTreeTable;
 			sourceTree = "<group>";
@@ -223,7 +223,7 @@
 			files = (
 				24C3DE8E1AC4B617008E3087 /* ViewController.swift in Sources */,
 				24C3DE8C1AC4B617008E3087 /* AppDelegate.swift in Sources */,
-				24C3DEAC1AC4B699008E3087 /* IMGTree.swift in Sources */,
+				24C8052C1ACB449800440864 /* IMGTree.swift in Sources */,
 				24C3DEB01AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift in Sources */,
 				24C3DEAE1AC4B7A9008E3087 /* IMGTreeController.swift in Sources */,
 			);
@@ -417,6 +417,7 @@
 				24C3DEA71AC4B617008E3087 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		24C3DEA81AC4B617008E3087 /* Build configuration list for PBXNativeTarget "SwiftTreeTableTests" */ = {
 			isa = XCConfigurationList;
@@ -425,6 +426,7 @@
 				24C3DEAA1AC4B617008E3087 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

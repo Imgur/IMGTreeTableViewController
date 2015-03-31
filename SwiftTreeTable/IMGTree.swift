@@ -55,7 +55,7 @@ class IMGTree: NSObject, NSCoding {
     }
     
     //MARK: NSCoding
- 
+    
     required convenience init(coder aDecoder: NSCoder) {
         self.init()
     }
@@ -68,11 +68,11 @@ class IMGTree: NSObject, NSCoding {
     
     override var description : String {
         var tableState = "Tree: rootnode: \(rootNode.description)\n"
-
+        
         for node in rootNode.infixTraversal() {
             tableState += "\(node.description)\n"
         }
-
+        
         return tableState
     }
 }
@@ -103,7 +103,7 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
         var currentNode: IMGTreeNode = self
         var depth = 0
         
-        while currentNode.parentNode != nil {
+        while currentNode.parentNode != nil && !currentNode.parentNode!.isKindOfClass(IMGTreeCollapsedSectionNode) {
             currentNode = currentNode.parentNode!
             depth++
         }
@@ -160,7 +160,7 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
         }
         didSet {
             if isVisible != oldValue {
-//                println("\(description) isVisibleChanged:  \(isVisible)")
+                //                println("\(description) isVisibleChanged:  \(isVisible)")
                 NSNotificationCenter.defaultCenter().postNotificationName("isVisibleChanged", object: self)
             }
         }
@@ -201,10 +201,10 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
     func addChild(child: IMGTreeNode) {
         if child.isKindOfClass(IMGTreeSelectionNode) || child.isKindOfClass(IMGTreeCollapsedSectionNode) {
             children.insert(child, atIndex: 0)
-            child.parentNode = self
         } else {
             children += [child]
         }
+        child.parentNode = self
     }
     
     func removeChild(child: IMGTreeNode) {
@@ -328,26 +328,23 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
 Class for nodes that represent user 'selection' of a parent node
 */
 class IMGTreeSelectionNode : IMGTreeNode {
-
+    
 }
 
 class IMGTreeActionNode : IMGTreeNode {
-
+    
 }
 
 class IMGTreeCollapsedSectionNode : IMGTreeNode {
     
     var topNode: IMGTreeNode?
     var bottomNode: IMGTreeNode?
+    let originalTopNode: IMGTreeNode
     let originatingNode: IMGTreeNode
-    
-    override var depth: Int {
-        return 0
-    }
     
     var triggeredFromPreviousCollapsedSecton: Bool {
         if (parentNode != nil) {
-            return originatingNode.children.first!.isKindOfClass(IMGTreeCollapsedSectionNode)
+            return originalTopNode.children.first!.isKindOfClass(IMGTreeCollapsedSectionNode)
         } else {
             return topNode!.children.first!.isKindOfClass(IMGTreeCollapsedSectionNode)
         }
@@ -357,7 +354,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode {
         let rowsDeleted = NSMutableIndexSet()
         
         var firstRemovalIndex = topNode!.visibleTraversalIndex()! + 1
-        var removeRange = topNode!.visibleTraversalCount() - 1
+        var removeRange = topNode!.visibleTraversalCount()
         
         if triggeredFromPreviousCollapsedSecton {
             firstRemovalIndex++
@@ -369,37 +366,71 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode {
         return rowsDeleted.copy() as NSIndexSet
     }
     
-    var nodesToBeHidden: [IMGTreeNode] {
-        return topNode!.infixTraversal()
+    var indicesForContainingNodes: [NSIndexPath] {
+        var rowsToHide: [NSIndexPath] = []
+        
+        rowsToHide.extend(bottomNode!.indicesForTraversal())
+        bottomNode?.children.map({ (var child: IMGTreeNode) -> IMGTreeNode in
+            child.isVisible = false
+            return child
+        })
+        
+        rowsToHide.append(NSIndexPath(forRow: bottomNode!.visibleTraversalIndex()!, inSection: 0))
+        bottomNode?.isVisible = false
+        
+        rowsToHide.append(NSIndexPath(forRow: visibleTraversalIndex()!, inSection: 0))
+        isVisible = false
+        
+        return rowsToHide
     }
     
-    func insertCollapsedSectionIntoTree() {
+    var nodesToBeHidden: [IMGTreeNode] {
+        var nodes = topNode!.infixTraversal()
+        return nodes
+    }
+    
+    func insertCollapsedSectionIntoTree() -> [NSIndexPath] {
+        var indices: [NSIndexPath] = []
+        isVisible = true
         topNode?.addChild(self)
+        indices.append(NSIndexPath(forRow: visibleTraversalIndex()!, inSection: 0))
         addChild(bottomNode!)
         bottomNode!.isVisible = true
+        indices.append(NSIndexPath(forRow: bottomNode!.visibleTraversalIndex()!, inSection: 0))
         for child in bottomNode!.children {
             child.isVisible = true
+            indices.append(NSIndexPath(forRow: child.visibleTraversalIndex()!, inSection: 0))
         }
+        return indices
+    }
+    
+    func restoreCollapsedSection() -> [NSIndexPath] {
+        var indices: [NSIndexPath] = []
+        
+        topNode?.children = originalTopNode.children
+        let restoredIndices = topNode!.indicesForTraversal()
+        indices.extend(restoredIndices)
+        
+        return restoredIndices
     }
     
     init(topNode: IMGTreeNode, bottomNode: IMGTreeNode){
         self.topNode = topNode
         self.bottomNode = bottomNode
-        
-        self.originatingNode = topNode.copy() as IMGCommentNode
+        self.originatingNode = bottomNode.parentNode!
+        self.originalTopNode = topNode.copy() as IMGCommentNode
         super.init(parentNode: topNode)
     }
-
+    
     required init(parentNode nodesParent: IMGTreeNode) {
         fatalError("init(parentNode:) has not been implemented")
     }
-
+    
     required convenience init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     required convenience init(parentNode: IMGTreeNode, isVisible: Bool) {
-        fatalError("init(coder:) has not been implemented")
-        
+        self.init(topNode: parentNode, bottomNode: parentNode.children.first!)
     }
 }

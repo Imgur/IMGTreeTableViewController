@@ -69,14 +69,8 @@ class IMGTreeController: NSObject, UITableViewDataSource{
                 }
             }
         } else {
-            if parentNode.depth > collapsedSectionDepth {
-                let collapsedNode = IMGTreeCollapsedSectionNode(topNode: parentNode.anchorNode, bottomNode: parentNode)
-                insertCollapsedSectionIntoTree(collapsedNode, animated: true)
-            } else {
-                
-                for child in parentNode.children {
-                    child.isVisible = true
-                }
+            for child in parentNode.children {
+                child.isVisible = true
             }
         }
     }
@@ -84,11 +78,23 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     func didSelectRow(indexPath: NSIndexPath) {
         if let node = tree?.rootNode.visibleNodeForIndex(indexPath.row) {
             if !node.isKindOfClass(IMGTreeSelectionNode) && !node.isKindOfClass(IMGTreeActionNode) {
-                transactionInProgress = true
-                if addSelectionNodeIfNecessary(node) {
-                    setNodeChildrenVisiblility(node, visibility: !node.isChildrenVisible)
+                
+                if let collapsedSection = node as? IMGTreeCollapsedSectionNode {
+                    restoreCollapsedSection(collapsedSection, animated: true)
+                } else if !node.isChildrenVisible && node.depth > collapsedSectionDepth {
+                    
+                    println("node.depth = \(node.depth)")
+                    let collapsedNode = IMGTreeCollapsedSectionNode(topNode: node.anchorNode, bottomNode: node)
+                    insertCollapsedSectionIntoTree(collapsedNode, animated: true)
+                    
+                } else {
+                    
+                    transactionInProgress = true
+                    if addSelectionNodeIfNecessary(node) {
+                        setNodeChildrenVisiblility(node, visibility: !node.isChildrenVisible)
+                    }
+                    transactionInProgress = false
                 }
-                transactionInProgress = false
             }
         }
     }
@@ -111,19 +117,47 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         
         if triggeredFromPreviousCollapsedSecton {
             let firstDeleteIndex = collapsedNode.topNode!.visibleTraversalIndex()! + 1
-            self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: firstDeleteIndex, inSection: 0)], withRowAnimation: animationStyle)
+            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: firstDeleteIndex, inSection: 0)], withRowAnimation: animationStyle)
         }
         
         //delete rows collapsed section will hide
         let nodesToHide = collapsedNode.nodesToBeHidden
+        let nodeIndicesToHide = collapsedNode.indicesToBeHidden
         for internalNode in reverse(nodesToHide) {
             internalNode.isVisible = false
         }
+        var indices: [NSIndexPath] = []
+        nodeIndicesToHide.enumerateIndexesUsingBlock({ (rowIndex: NSInteger, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+            indices.append(NSIndexPath(forRow: rowIndex, inSection: 0))
+        })
+        tableView.deleteRowsAtIndexPaths(indices, withRowAnimation: animationStyle)
         
-        collapsedNode.insertCollapsedSectionIntoTree()
+        let indicesToShow = collapsedNode.insertCollapsedSectionIntoTree()
+        tableView.insertRowsAtIndexPaths(indicesToShow, withRowAnimation: animationStyle)
         if !triggeredFromPreviousCollapsedSecton {
-            collapsedNode.isVisible = true
+//            tableView.insertRowsAtIndexPaths([collapsedNode.visibleTraversalIndex()!], withRowAnimation: animationStyle)
         }
+    }
+    
+    func restoreCollapsedSection(collapsedNode: IMGTreeCollapsedSectionNode, animated: Bool) {
+        let animationStyle = animated ? UITableViewRowAnimation.Fade : UITableViewRowAnimation.None;
+        let triggeredFromPreviousCollapsedSecton = collapsedNode.triggeredFromPreviousCollapsedSecton
+        
+        if triggeredFromPreviousCollapsedSecton {
+            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: collapsedNode.visibleTraversalIndex()!, inSection: 0)], withRowAnimation: animationStyle)
+        }
+        
+        //delete  the containing nodes of the bottom node
+        let nodeIndicesToHide = collapsedNode.indicesForContainingNodes
+        tableView.deleteRowsAtIndexPaths(nodeIndicesToHide, withRowAnimation: animationStyle)
+        
+        if !triggeredFromPreviousCollapsedSecton {
+//            tableView.insertRowsAtIndexPaths([collapsedNode.visibleTraversalIndex()!], withRowAnimation: animationStyle)
+        }
+        
+        //restore old nodes
+        let nodeIndicesToShow = collapsedNode.restoreCollapsedSection()
+        tableView.insertRowsAtIndexPaths(nodeIndicesToShow, withRowAnimation: animationStyle)
     }
     
     func addSelectionNodeIfNecessary(parentNode: IMGTreeNode) -> Bool {
@@ -132,7 +166,6 @@ class IMGTreeController: NSObject, UITableViewDataSource{
             let needsChildToggling = parentNode.isSelectionNodeInVisibleTraversal() || parentNode.isChildrenVisible
             
             if self.selectionNode != nil {
-                
                 //hide previous selection node
                 self.selectionNode?.removeFromParent()
             }
@@ -173,7 +206,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         
         tableView.beginUpdates()
         
-        var addedIndices: NSMutableSet = NSMutableSet()
+        var addedIndices: NSMutableArray = NSMutableArray()
         for node in insertedNodes {
             if let rowIndex = node.visibleTraversalIndex() {
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
@@ -181,9 +214,9 @@ class IMGTreeController: NSObject, UITableViewDataSource{
             }
             addedIndices.addObjectsFromArray(node.indicesForTraversal())
         }
-        tableView.insertRowsAtIndexPaths(addedIndices.allObjects, withRowAnimation: .Top)
+        tableView.insertRowsAtIndexPaths(addedIndices, withRowAnimation: .Top)
         
-        var deletedIndices: NSMutableSet = NSMutableSet()
+        var deletedIndices: NSMutableArray = NSMutableArray()
         for node in deletedNodes {
             if let rowIndex = node.previousVisibleIndex {
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
@@ -191,7 +224,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
             }
             deletedIndices.addObjectsFromArray(node.previousVisibleChildren!)
         }
-        tableView.deleteRowsAtIndexPaths(deletedIndices.allObjects, withRowAnimation: .Top)
+        tableView.deleteRowsAtIndexPaths(deletedIndices, withRowAnimation: .Top)
         
         
         tableView.endUpdates()
