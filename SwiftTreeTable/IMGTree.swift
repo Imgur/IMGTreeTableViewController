@@ -335,12 +335,12 @@ class IMGTreeActionNode : IMGTreeNode {
     
 }
 
-class IMGTreeCollapsedSectionNode : IMGTreeNode {
+class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     var topNode: IMGTreeNode?
     var bottomNode: IMGTreeNode?
-    let originalTopNode: IMGTreeNode
-    let originatingNode: IMGTreeNode
+    var originalTopNode: IMGTreeNode
+    var originatingNode: IMGTreeNode
     
     var triggeredFromPreviousCollapsedSecton: Bool {
         if (parentNode != nil) {
@@ -412,6 +412,16 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode {
         indices.extend(restoredIndices)
         
         return restoredIndices
+    }
+    
+    //MARK: NSCopying
+    
+   override  func copyWithZone(zone: NSZone) -> AnyObject {
+        var nodeCopy = self.dynamicType(parentNode: originalTopNode, isVisible: isVisible)
+        nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in
+            return childNode.copy() as IMGTreeNode
+        })
+        return nodeCopy
     }
     
     init(topNode: IMGTreeNode, bottomNode: IMGTreeNode){
