@@ -137,6 +137,17 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
             return currentNode
         }
     }
+    var anchorNode: IMGTreeNode {
+        get {
+            var currentNode: IMGTreeNode = self
+            
+            while currentNode.parentNode?.parentNode != nil {
+                currentNode = currentNode.parentNode!
+            }
+            
+            return currentNode
+        }
+    }
     var isVisible: Bool {
         willSet {
             previousVisibleIndex = visibleTraversalIndex()
@@ -149,6 +160,7 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
         }
         didSet {
             if isVisible != oldValue {
+//                println("\(description) isVisibleChanged:  \(isVisible)")
                 NSNotificationCenter.defaultCenter().postNotificationName("isVisibleChanged", object: self)
             }
         }
@@ -169,6 +181,11 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
         children = []
     }
     
+    required convenience init(parentNode: IMGTreeNode, isVisible: Bool) {
+        self.init(parentNode: parentNode)
+        self.isVisible = isVisible
+    }
+    
     //MARK: NSCoding
     
     required convenience init(coder aDecoder: NSCoder) {
@@ -182,7 +199,7 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
     //MARK: Public
     
     func addChild(child: IMGTreeNode) {
-        if child.isKindOfClass(IMGTreeSelectionNode) {
+        if child.isKindOfClass(IMGTreeSelectionNode) || child.isKindOfClass(IMGTreeCollapsedSectionNode) {
             children.insert(child, atIndex: 0)
             child.parentNode = self
         } else {
@@ -298,10 +315,11 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
     //MARK: NSCopying
     
     func copyWithZone(zone: NSZone) -> AnyObject {
-        let nodeCopy = IMGTreeNode()
+        let nodeCopy = self.dynamicType(parentNode: parentNode!, isVisible: isVisible)
         nodeCopy.parentNode = parentNode
-        nodeCopy.children = children
-        nodeCopy.isVisible = isVisible
+        nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in
+            return childNode.copy() as IMGTreeNode
+        })
         return nodeCopy
     }
 }
@@ -319,4 +337,69 @@ class IMGTreeActionNode : IMGTreeNode {
 
 class IMGTreeCollapsedSectionNode : IMGTreeNode {
     
+    var topNode: IMGTreeNode?
+    var bottomNode: IMGTreeNode?
+    let originatingNode: IMGTreeNode
+    
+    override var depth: Int {
+        return 0
+    }
+    
+    var triggeredFromPreviousCollapsedSecton: Bool {
+        if (parentNode != nil) {
+            return originatingNode.children.first!.isKindOfClass(IMGTreeCollapsedSectionNode)
+        } else {
+            return topNode!.children.first!.isKindOfClass(IMGTreeCollapsedSectionNode)
+        }
+    }
+    
+    var indicesToBeHidden: NSIndexSet {
+        let rowsDeleted = NSMutableIndexSet()
+        
+        var firstRemovalIndex = topNode!.visibleTraversalIndex()! + 1
+        var removeRange = topNode!.visibleTraversalCount() - 1
+        
+        if triggeredFromPreviousCollapsedSecton {
+            firstRemovalIndex++
+            removeRange--
+        }
+        
+        rowsDeleted.addIndexesInRange(NSMakeRange(firstRemovalIndex, removeRange))
+        
+        return rowsDeleted.copy() as NSIndexSet
+    }
+    
+    var nodesToBeHidden: [IMGTreeNode] {
+        return topNode!.infixTraversal()
+    }
+    
+    func insertCollapsedSectionIntoTree() {
+        topNode?.addChild(self)
+        addChild(bottomNode!)
+        bottomNode!.isVisible = true
+        for child in bottomNode!.children {
+            child.isVisible = true
+        }
+    }
+    
+    init(topNode: IMGTreeNode, bottomNode: IMGTreeNode){
+        self.topNode = topNode
+        self.bottomNode = bottomNode
+        
+        self.originatingNode = topNode.copy() as IMGCommentNode
+        super.init(parentNode: topNode)
+    }
+
+    required init(parentNode nodesParent: IMGTreeNode) {
+        fatalError("init(parentNode:) has not been implemented")
+    }
+
+    required convenience init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    required convenience init(parentNode: IMGTreeNode, isVisible: Bool) {
+        fatalError("init(coder:) has not been implemented")
+        
+    }
 }

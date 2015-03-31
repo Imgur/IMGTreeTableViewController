@@ -8,11 +8,17 @@
 
 import UIKit
 
-class IMGCommentNode: IMGTreeNode {
+class IMGCommentNode: IMGTreeNode, NSCopying {
     var comment: String?
     
     override var description : String {
         return "Node: \(comment)"
+    }
+    
+    override func copyWithZone(zone: NSZone) -> AnyObject {
+        var copy = super.copyWithZone(zone) as IMGCommentNode
+        copy.comment = comment
+        return copy
     }
 }
 
@@ -67,5 +73,7 @@ class IMGSampleTreeConstructor: NSObject, IMGTreeConstructorDelegate {
         commentNode.comment = model.comment
         
     }
+    
+    
    
 }

@@ -21,6 +21,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     
     var delegate: IMGTreeControllerDelegate!
     var tableView: UITableView!
+    var collapsedSectionDepth = 3
     var tree: IMGTree? {
         didSet {
             if tree != nil {
@@ -59,17 +60,23 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     
     //MARK: Public
     
-    func setNodeChildrenVisiblility(node: IMGTreeNode, visibility: Bool) {
+    func setNodeChildrenVisiblility(parentNode: IMGTreeNode, visibility: Bool) {
         
         if !visibility {
-            for child in reverse(node.children) {
+            for child in reverse(parentNode.children) {
                 if !child.isKindOfClass(IMGTreeSelectionNode) {
                     child.isVisible = visibility
                 }
             }
         } else {
-            for child in node.children {
-                child.isVisible = true
+            if parentNode.depth > collapsedSectionDepth {
+                let collapsedNode = IMGTreeCollapsedSectionNode(topNode: parentNode.anchorNode, bottomNode: parentNode)
+                insertCollapsedSectionIntoTree(collapsedNode, animated: true)
+            } else {
+                
+                for child in parentNode.children {
+                    child.isVisible = true
+                }
             }
         }
     }
@@ -97,6 +104,27 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     }
     
     //MARK: Private
+    
+    func insertCollapsedSectionIntoTree(collapsedNode: IMGTreeCollapsedSectionNode, animated: Bool) {
+        let animationStyle = animated ? UITableViewRowAnimation.Fade : UITableViewRowAnimation.None;
+        let triggeredFromPreviousCollapsedSecton = collapsedNode.triggeredFromPreviousCollapsedSecton
+        
+        if triggeredFromPreviousCollapsedSecton {
+            let firstDeleteIndex = collapsedNode.topNode!.visibleTraversalIndex()! + 1
+            self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: firstDeleteIndex, inSection: 0)], withRowAnimation: animationStyle)
+        }
+        
+        //delete rows collapsed section will hide
+        let nodesToHide = collapsedNode.nodesToBeHidden
+        for internalNode in reverse(nodesToHide) {
+            internalNode.isVisible = false
+        }
+        
+        collapsedNode.insertCollapsedSectionIntoTree()
+        if !triggeredFromPreviousCollapsedSecton {
+            collapsedNode.isVisible = true
+        }
+    }
     
     func addSelectionNodeIfNecessary(parentNode: IMGTreeNode) -> Bool {
 
