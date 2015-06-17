@@ -27,7 +27,7 @@ class IMGTree: NSObject, NSCoding {
             let rootNode = nodeClass(parentNode: tree.rootNode)
             constructorDelegate.configureNode(rootNode, modelObject: rootObject)
             if let childObjects = constructorDelegate.childrenForNodeObject(rootObject) {
-                rootNode.children = IMGTree.process(tree.rootNode, childObjects: childObjects, tree: tree, constructorDelegate: constructorDelegate) as [IMGTreeNode]
+                rootNode.children = IMGTree.process(tree.rootNode, childObjects: childObjects, tree: tree, constructorDelegate: constructorDelegate) as! [IMGTreeNode]
             }
             childNodes.append(rootNode)
         }
@@ -46,7 +46,7 @@ class IMGTree: NSObject, NSCoding {
             let childNode = nodeClass(parentNode: parentNode)
             constructorDelegate.configureNode(childNode, modelObject: childObject)
             if let childObjects = constructorDelegate.childrenForNodeObject(childObject) {
-                childNode.children = IMGTree.process(tree.rootNode, childObjects: childObjects, tree: tree, constructorDelegate: constructorDelegate) as [IMGTreeNode]
+                childNode.children = IMGTree.process(tree.rootNode, childObjects: childObjects, tree: tree, constructorDelegate: constructorDelegate) as! [IMGTreeNode]
             }
             childNodes.append(childNode)
         }

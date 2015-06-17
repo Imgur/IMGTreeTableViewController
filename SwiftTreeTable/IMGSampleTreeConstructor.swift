@@ -57,13 +57,13 @@ class IMGSampleTreeConstructor: NSObject, IMGTreeConstructorDelegate {
     }
     
     func childrenForNodeObject(object: AnyObject) -> [AnyObject]? {
-        let commentObject = object as IMGCommentModel
+        let commentObject = object as! IMGCommentModel
         return commentObject.replies
     }
     
     func configureNode(node: IMGTreeNode, modelObject: AnyObject) {
-        let commentNode = node as IMGCommentNode
-        let model = modelObject as IMGCommentModel
+        let commentNode = node as! IMGCommentNode
+        let model = modelObject as! IMGCommentModel
         commentNode.comment = model.comment
         
     }
