@@ -194,7 +194,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     }
     
     func visibilityChanged(notification: NSNotification!) {
-        let node = notification.object! as IMGTreeNode
+        let node = notification.object! as! IMGTreeNode
         if node.isVisible {
             insertedNodes.append(node)
         } else {

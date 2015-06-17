@@ -24,10 +24,10 @@ class ViewController: UITableViewController, IMGTreeControllerDelegate {
     }
     
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UITableViewCell
         switch node {
         case is IMGCommentNode:
-            let commentNode = node as IMGCommentNode
+            let commentNode = node as! IMGCommentNode
             cell.textLabel?.text = commentNode.comment
         case is IMGTreeSelectionNode:
             cell.textLabel?.text = "selection"
