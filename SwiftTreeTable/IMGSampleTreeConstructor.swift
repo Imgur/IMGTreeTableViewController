@@ -16,7 +16,7 @@ class IMGCommentNode: IMGTreeNode, NSCopying {
     }
     
     override func copyWithZone(zone: NSZone) -> AnyObject {
-        var copy = super.copyWithZone(zone) as IMGCommentNode
+        var copy = super.copyWithZone(zone) as! IMGCommentNode
         copy.comment = comment
         return copy
     }

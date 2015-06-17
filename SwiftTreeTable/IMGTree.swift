@@ -318,7 +318,7 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
         let nodeCopy = self.dynamicType(parentNode: parentNode!, isVisible: isVisible)
         nodeCopy.parentNode = parentNode
         nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in
-            return childNode.copy() as IMGTreeNode
+            return childNode.copy() as! IMGTreeNode
         })
         return nodeCopy
     }
@@ -363,7 +363,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
         
         rowsDeleted.addIndexesInRange(NSMakeRange(firstRemovalIndex, removeRange))
         
-        return rowsDeleted.copy() as NSIndexSet
+        return rowsDeleted.copy() as! NSIndexSet
     }
     
     var indicesForContainingNodes: [NSIndexPath] {
@@ -419,7 +419,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
    override  func copyWithZone(zone: NSZone) -> AnyObject {
         var nodeCopy = self.dynamicType(parentNode: originalTopNode, isVisible: isVisible)
         nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in
-            return childNode.copy() as IMGTreeNode
+            return childNode.copy() as! IMGTreeNode
         })
         return nodeCopy
     }
@@ -428,7 +428,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
         self.topNode = topNode
         self.bottomNode = bottomNode
         self.originatingNode = bottomNode.parentNode!
-        self.originalTopNode = topNode.copy() as IMGCommentNode
+        self.originalTopNode = topNode.copy() as! IMGCommentNode
         super.init(parentNode: topNode)
     }
     

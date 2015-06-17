@@ -214,7 +214,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
             }
             addedIndices.addObjectsFromArray(node.indicesForTraversal())
         }
-        tableView.insertRowsAtIndexPaths(addedIndices, withRowAnimation: .Top)
+        tableView.insertRowsAtIndexPaths(addedIndices as [AnyObject], withRowAnimation: .Top)
         
         var deletedIndices: NSMutableArray = NSMutableArray()
         for node in deletedNodes {
@@ -224,7 +224,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
             }
             deletedIndices.addObjectsFromArray(node.previousVisibleChildren!)
         }
-        tableView.deleteRowsAtIndexPaths(deletedIndices, withRowAnimation: .Top)
+        tableView.deleteRowsAtIndexPaths(deletedIndices as [AnyObject], withRowAnimation: .Top)
         
         
         tableView.endUpdates()
