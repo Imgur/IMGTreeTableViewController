@@ -11,9 +11,9 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.backgroundColor = UIColor.turquoiseColor()
+        tableView.backgroundColor = .turquoiseColor()
         tableView.delegate = self
-        view.backgroundColor = UIColor.turquoiseColor()
+        view.backgroundColor = .turquoiseColor()
         
         let construction = IMGSampleTreeConstructor()
         tree = construction.sampleCommentTree()
@@ -32,17 +32,17 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
             cell.textLabel?.text = commentNode.comment
         case is IMGTreeSelectionNode:
             cell.textLabel?.text = "selection"
-            cell.accessoryType = UITableViewCellAccessoryType.DetailButton
+            cell.accessoryType = .DetailButton
         case is IMGTreeActionNode:
             cell.textLabel?.text = "action"
-            cell.accessoryType = UITableViewCellAccessoryType.DetailButton
+            cell.accessoryType = .DetailButton
         case is IMGTreeCollapsedSectionNode:
             cell.textLabel?.text = "collapsed"
         default:
             break
         }
         cell.backgroundColor = backgroundColors[(node.depth) % backgroundColors.count]
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.selectionStyle = .None
         return cell
     }
     

@@ -115,9 +115,9 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
                 
                 if let collapsedSection = node as? IMGTreeCollapsedSectionNode {
                     restoreCollapsedSection(collapsedSection, animated: true)
-                } else if !node.isChildrenVisible && node.depth > collapsedSectionDepth {
+                } else if !node.isChildrenVisible && node.collapsedDepth > collapsedSectionDepth {
                     
-                    println("node.depth = \(node.depth)")
+//                    println("node.depth = \(node.depth)")
                     let collapsedNode = IMGTreeCollapsedSectionNode(parentNode: node, isVisible: false)
                     insertCollapsedSectionIntoTree(collapsedNode, animated: true)
                     
@@ -160,13 +160,18 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
         for internalNode in reverse(nodesToHide) {
             internalNode.isVisible = false
         }
+        assert(nodesToHide.count == nodeIndicesToHide.count, "deleted nodes and indices count not equivalent")
         var indices: [NSIndexPath] = []
         nodeIndicesToHide.enumerateIndexesUsingBlock({ (rowIndex: NSInteger, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+            println("hiding \(rowIndex)")
             indices.append(NSIndexPath(forRow: rowIndex, inSection: 0))
         })
         tableView.deleteRowsAtIndexPaths(indices, withRowAnimation: animationStyle)
         
         let indicesToShow = collapsedNode.insertCollapsedSectionIntoTree()
+        for index in indicesToShow {
+            println("showing \(index.row)")
+        }
         tableView.insertRowsAtIndexPaths(indicesToShow, withRowAnimation: animationStyle)
         if !triggeredFromPreviousCollapsedSecton {
 //            tableView.insertRowsAtIndexPaths([collapsedNode.visibleTraversalIndex()!], withRowAnimation: animationStyle)
@@ -240,25 +245,25 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
         
         tableView.beginUpdates()
         
-        var addedIndices: NSMutableArray = NSMutableArray()
+        var addedIndices: [AnyObject] = []
         for node in insertedNodes {
             if let rowIndex = node.visibleTraversalIndex() {
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
-                addedIndices.addObject(indexPath)
+                addedIndices.append(indexPath)
             }
-            addedIndices.addObjectsFromArray(node.indicesForTraversal())
+            addedIndices.extend(node.visibleIndicesForTraversal() as [AnyObject])
         }
-        tableView.insertRowsAtIndexPaths(addedIndices as [AnyObject], withRowAnimation: .Top)
+        tableView.insertRowsAtIndexPaths(addedIndices, withRowAnimation: .Top)
         
-        var deletedIndices: NSMutableArray = NSMutableArray()
+        var deletedIndices: [AnyObject] = []
         for node in deletedNodes {
             if let rowIndex = node.previousVisibleIndex {
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
-                deletedIndices.addObject(indexPath)
+                deletedIndices.append(indexPath)
             }
-            deletedIndices.addObjectsFromArray(node.previousVisibleChildren!)
+            deletedIndices.extend(node.previousVisibleChildren! as [AnyObject])
         }
-        tableView.deleteRowsAtIndexPaths(deletedIndices as [AnyObject], withRowAnimation: .Top)
+        tableView.deleteRowsAtIndexPaths(deletedIndices, withRowAnimation: .Top)
         
         
         tableView.endUpdates()

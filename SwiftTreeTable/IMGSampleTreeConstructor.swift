@@ -12,7 +12,7 @@ class IMGCommentNode: IMGTreeNode, NSCopying {
     var comment: String?
     
     override var description : String {
-        return "Node: \(comment)"
+        return "Node: \(comment!)"
     }
     
     override func copyWithZone(zone: NSZone) -> AnyObject {

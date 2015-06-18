@@ -142,6 +142,20 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
         var currentNode: IMGTreeNode = self
         var depth = 0
         
+        while currentNode.parentNode != nil {
+            currentNode = currentNode.parentNode!
+            depth++
+        }
+        
+        return depth
+    }
+    /**
+        The depth of this node up until the first collapsed section ancestor
+    */
+    var collapsedDepth: Int {
+        var currentNode: IMGTreeNode = self
+        var depth = 0
+        
         while currentNode.parentNode != nil && !currentNode.parentNode!.isKindOfClass(IMGTreeCollapsedSectionNode) {
             currentNode = currentNode.parentNode!
             depth++
@@ -205,7 +219,7 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
             previousVisibleIndex = visibleTraversalIndex()
             if isVisible {
                 
-                previousVisibleChildren = indicesForTraversal()
+                previousVisibleChildren = visibleIndicesForTraversal()
             } else {
                 previousVisibleChildren = []
             }
@@ -344,9 +358,9 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
     }
     
     /**
-        Retrieves an array of indices of its children
+        Retrieves an array of indices of its visible children
     */
-    func indicesForTraversal() -> [NSIndexPath] {
+    func visibleIndicesForTraversal() -> [NSIndexPath] {
         let traversal = infixTraversal()
         return traversal.map({ (node: IMGTreeNode) -> NSIndexPath in
             return NSIndexPath(forRow: node.visibleTraversalIndex()!, inSection: 0)
@@ -414,7 +428,7 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
     //MARK: DebugPrintable
     
     override var description : String {
-        return "Node: \(rootNode.indexForNode(self)) \n"
+        return "Node: \(rootNode.visibleIndexForNode(self)!) \n"
     }
     
     //MARK: NSCopying
@@ -471,26 +485,10 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
         }
     }
     
-    var indicesToBeHidden: NSIndexSet {
-        let rowsDeleted = NSMutableIndexSet()
-        
-        var firstRemovalIndex = anchorNode.visibleTraversalIndex()! + 1
-        var removeRange = anchorNode.visibleTraversalCount()
-        
-        if triggeredFromPreviousCollapsedSecton {
-            firstRemovalIndex++
-            removeRange--
-        }
-        
-        rowsDeleted.addIndexesInRange(NSMakeRange(firstRemovalIndex, removeRange))
-        
-        return rowsDeleted.copy() as! NSIndexSet
-    }
-    
     var indicesForContainingNodes: [NSIndexPath] {
         var rowsToHide: [NSIndexPath] = []
         
-        rowsToHide.extend(originatingNode.indicesForTraversal())
+        rowsToHide.extend(originatingNode.visibleIndicesForTraversal())
         originatingNode.children.map({ (var child: IMGTreeNode) -> IMGTreeNode in
             child.isVisible = false
             return child
@@ -503,6 +501,22 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
         isVisible = false
         
         return rowsToHide
+    }
+    
+    var indicesToBeHidden: NSIndexSet {
+        let rowsDeleted = NSMutableIndexSet()
+        
+        var firstRemovalIndex = anchorNode.visibleTraversalIndex()! + 1
+        var removeRange = anchorNode.visibleTraversalCount()
+        
+        if triggeredFromPreviousCollapsedSecton {
+//            firstRemovalIndex++
+//            removeRange--
+        }
+        
+        rowsDeleted.addIndexesInRange(NSMakeRange(firstRemovalIndex, removeRange))
+        
+        return rowsDeleted.copy() as! NSIndexSet
     }
     
     var nodesToBeHidden: [IMGTreeNode] {
@@ -531,6 +545,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     func insertCollapsedSectionIntoTree() -> [NSIndexPath] {
         var indices: [NSIndexPath] = []
         isVisible = true
+        anchorNode.children = []
         anchorNode.addChild(self)
         indices.append(NSIndexPath(forRow: visibleTraversalIndex()!, inSection: 0))
         addChild(originatingNode)
@@ -544,12 +559,18 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     }
     
     func restoreCollapsedSection() -> [NSIndexPath] {
-        var indices: [NSIndexPath] = []
         
+        var selectedNode: IMGTreeSelectionNode?
+        if anchorNode.isSelected {
+            selectedNode = anchorNode.children.first as? IMGTreeSelectionNode
+        }
         anchorNode.children = originalAnchorNode.children
-        let restoredIndices = anchorNode.indicesForTraversal()
-        indices.extend(restoredIndices)
+        if selectedNode != nil {
+            anchorNode.children.insert(selectedNode!, atIndex: 0)
+            selectedNode?.parentNode = anchorNode
+        }
         
+        let restoredIndices = anchorNode.visibleIndicesForTraversal()
         return restoredIndices
     }
     
@@ -561,5 +582,11 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
             return childNode.copy() as! IMGTreeNode
         })
         return nodeCopy
+    }
+    
+    //MARK: DebugPrintable
+    
+    override var description : String {
+        return "Collapsed Node: \(rootNode.visibleIndexForNode(self)!) \n"
     }
 }
