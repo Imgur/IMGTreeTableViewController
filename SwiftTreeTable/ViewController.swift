@@ -1,21 +1,23 @@
 import UIKit
 
-class ViewController: UITableViewController, IMGTreeControllerDelegate {
+class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableViewDelegate {
     
     var tree: IMGTree!
-    var controller: IMGTreeController!
+    var controller: IMGTreeTableController!
     
-    let backgroundColors = [UIColor.greenColor(),UIColor.blueColor(),UIColor.yellowColor(),UIColor.redColor(),UIColor.purpleColor(),UIColor.grayColor(),UIColor.whiteColor()]
+    @IBOutlet var tableView: UITableView!
+    
+    let backgroundColors = [UIColor.whiteColor(), UIColor.turquoiseColor(), UIColor.greenSeaColor(), UIColor.emeraldColor(), UIColor.nephritisColor(), UIColor.peterRiverColor(), UIColor.belizeHoleColor(), UIColor.amethystColor(), UIColor.wisteriaColor(), UIColor.wetAsphaltColor()]
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.backgroundColor = UIColor.turquoiseColor()
+        tableView.delegate = self
+        view.backgroundColor = UIColor.turquoiseColor()
         
         let construction = IMGSampleTreeConstructor()
         tree = construction.sampleCommentTree()
-        
-        controller = IMGTreeController(tableView: tableView, delegate: self)
-        
-        
+        controller = IMGTreeTableController(tableView: tableView, delegate: self)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -26,8 +28,7 @@ class ViewController: UITableViewController, IMGTreeControllerDelegate {
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UITableViewCell
         switch node {
-        case is IMGCommentNode:
-            let commentNode = node as! IMGCommentNode
+        case let commentNode as IMGCommentNode:
             cell.textLabel?.text = commentNode.comment
         case is IMGTreeSelectionNode:
             cell.textLabel?.text = "selection"
@@ -49,11 +50,11 @@ class ViewController: UITableViewController, IMGTreeControllerDelegate {
         return cell(node, indexPath: indexPath)
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         controller.didSelectRow(indexPath)
     }
     
-    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
         controller.didTriggerActionFromIndex(indexPath)
     }
 }

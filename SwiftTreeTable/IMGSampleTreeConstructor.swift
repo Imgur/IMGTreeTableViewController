@@ -33,6 +33,7 @@ class IMGSampleTreeConstructor: NSObject, IMGTreeConstructorDelegate {
         var comments: [IMGCommentModel] = []
         
         for i in 0..<3 {
+            //make up some root level comments
             let comment = IMGCommentModel()
             comment.comment = "Root: \(i)"
             comment.replies = sampleComments(0)
@@ -44,11 +45,13 @@ class IMGSampleTreeConstructor: NSObject, IMGTreeConstructorDelegate {
     }
     
     func sampleComments(depth: Int) -> [IMGCommentModel]? {
+        //make up some comments for some depth
         var comments: [IMGCommentModel] = []
         for i in 0..<3 {
             let comment = IMGCommentModel()
             comment.comment = "\(depth)     \(i+1)"
             if depth < 7 {
+                //recursive up to a point
                 comment.replies = sampleComments(depth+1)
             }
             comments.append(comment)
@@ -73,7 +76,4 @@ class IMGSampleTreeConstructor: NSObject, IMGTreeConstructorDelegate {
         commentNode.comment = model.comment
         
     }
-    
-    
-   
 }

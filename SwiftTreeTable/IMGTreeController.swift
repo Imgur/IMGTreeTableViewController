@@ -1,5 +1,5 @@
 //
-//  IMGTreeController.swift
+//  IMGTreeTableController.swift
 //  SwiftTreeTable
 //
 //  Created by Geoff MacDonald on 3/26/15.
@@ -8,20 +8,38 @@
 
 import UIKit
 
-@objc(IMGTreeControllerDelegate)
-protocol IMGTreeControllerDelegate {
+/**
+    Defines methods a controller should implement to feed UITableViewCell's to the IMGTreeTableController
+*/
+@objc(IMGTreeTableControllerDelegate)
+protocol IMGTreeTableControllerDelegate {
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
     func collapsedCell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
     optional func actionCell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
     optional func selectionCell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
 }
 
-@objc(IMGTreeController)
-class IMGTreeController: NSObject, UITableViewDataSource{
+/**
+    This class is to be used with its tableview convenience methods to modify the contained IMGTree and alter the UITableView
+*/
+@objc(IMGTreeTableController)
+class IMGTreeTableController: NSObject, UITableViewDataSource{
     
-    var delegate: IMGTreeControllerDelegate!
-    var tableView: UITableView!
+    /**
+        Delegate conformance is required for constructing table view cells to use representing the nodes in the tree
+    */
+    private weak var delegate: IMGTreeTableControllerDelegate!
+    /**
+        Tableview this controller controls upon convenience methods
+    */
+    private weak var tableView: UITableView!
+    /**
+        The depth at which the controller will collapse intermediate (up to root) subtrees exposing only the selected cell's subtree
+    */
     var collapsedSectionDepth = 3
+    /**
+        The tree representing the node tree displayed in the tableview. Can be nil, in which case the tableview is cleared at anytime.
+    */
     var tree: IMGTree? {
         didSet {
             if tree != nil {
@@ -31,7 +49,11 @@ class IMGTreeController: NSObject, UITableViewDataSource{
             tableView.reloadData()
         }
     }
-    var transactionInProgress: Bool {
+    
+    /**
+        Is the tableview currently being manipulated?
+    */
+    private var transactionInProgress: Bool {
         didSet {
             if transactionInProgress == false {
                 commit()
@@ -41,15 +63,27 @@ class IMGTreeController: NSObject, UITableViewDataSource{
             }
         }
     }
-    var insertedNodes: [IMGTreeNode] = []
-    var deletedNodes: [IMGTreeNode] = []
+    /**
+        The nodes that are being inserted by some action
+    */
+    private var insertedNodes: [IMGTreeNode] = []
+    /**
+        The nodes that are being deleted by some action
+    */
+    private var deletedNodes: [IMGTreeNode] = []
     
-    var selectionNode: IMGTreeSelectionNode?
-    var actionNode: IMGTreeActionNode?
+    /**
+        The currently selected node. There can only be one by design.
+    */
+    private var selectionNode: IMGTreeSelectionNode?
+    /**
+        The currently actionable node. There can only be one by design.
+    */
+    private var actionNode: IMGTreeActionNode?
     
     //MARK: initializers
     
-    required init(tableView: UITableView, delegate: IMGTreeControllerDelegate) {
+    required init(tableView: UITableView, delegate: IMGTreeTableControllerDelegate) {
         self.tableView = tableView
         self.delegate = delegate
         transactionInProgress = false
@@ -111,7 +145,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
     
     //MARK: Private
     
-    func insertCollapsedSectionIntoTree(collapsedNode: IMGTreeCollapsedSectionNode, animated: Bool) {
+    private func insertCollapsedSectionIntoTree(collapsedNode: IMGTreeCollapsedSectionNode, animated: Bool) {
         let animationStyle = animated ? UITableViewRowAnimation.Fade : UITableViewRowAnimation.None;
         let triggeredFromPreviousCollapsedSecton = collapsedNode.triggeredFromPreviousCollapsedSecton
         
@@ -139,7 +173,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         }
     }
     
-    func restoreCollapsedSection(collapsedNode: IMGTreeCollapsedSectionNode, animated: Bool) {
+    private func restoreCollapsedSection(collapsedNode: IMGTreeCollapsedSectionNode, animated: Bool) {
         let animationStyle = animated ? UITableViewRowAnimation.Fade : UITableViewRowAnimation.None;
         let triggeredFromPreviousCollapsedSecton = collapsedNode.triggeredFromPreviousCollapsedSecton
         
@@ -160,7 +194,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         tableView.insertRowsAtIndexPaths(nodeIndicesToShow, withRowAnimation: animationStyle)
     }
     
-    func addSelectionNodeIfNecessary(parentNode: IMGTreeNode) -> Bool {
+    private func addSelectionNodeIfNecessary(parentNode: IMGTreeNode) -> Bool {
 
         if !parentNode.isSelected{
             let needsChildToggling = parentNode.isSelectionNodeInVisibleTraversal() || parentNode.isChildrenVisible
@@ -180,7 +214,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         }
     }
     
-    func addActionNode(parentNode: IMGTreeNode) {
+    private func addActionNode(parentNode: IMGTreeNode) {
         
         if self.actionNode != nil {
             
@@ -202,7 +236,7 @@ class IMGTreeController: NSObject, UITableViewDataSource{
         }
     }
     
-    func commit() {
+    private func commit() {
         
         tableView.beginUpdates()
         
