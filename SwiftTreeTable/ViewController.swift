@@ -30,6 +30,7 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
         switch node {
         case let commentNode as IMGCommentNode:
             cell.textLabel?.text = commentNode.comment
+            cell.accessoryType = .None
         case is IMGTreeSelectionNode:
             cell.textLabel?.text = "selection"
             cell.accessoryType = .DetailButton
@@ -38,6 +39,7 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
             cell.accessoryType = .DetailButton
         case is IMGTreeCollapsedSectionNode:
             cell.textLabel?.text = "collapsed"
+            cell.accessoryType = .None
         default:
             break
         }
