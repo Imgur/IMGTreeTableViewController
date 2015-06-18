@@ -471,11 +471,11 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     /**
         The node that this node was triggered from
     */
-    let originatingNode: IMGTreeNode
+    private let originatingNode: IMGTreeNode
     /**
         The original anchors subtree
     */
-    let originalAnchorNode: IMGTreeNode
+    private let originalAnchorNode: IMGTreeNode
     
     var triggeredFromPreviousCollapsedSecton: Bool {
         if (parentNode != nil) {
