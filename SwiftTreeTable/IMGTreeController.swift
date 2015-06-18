@@ -118,7 +118,7 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
                 } else if !node.isChildrenVisible && node.depth > collapsedSectionDepth {
                     
                     println("node.depth = \(node.depth)")
-                    let collapsedNode = IMGTreeCollapsedSectionNode(topNode: node.anchorNode, bottomNode: node)
+                    let collapsedNode = IMGTreeCollapsedSectionNode(parentNode: node, isVisible: false)
                     insertCollapsedSectionIntoTree(collapsedNode, animated: true)
                     
                 } else {
@@ -150,7 +150,7 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
         let triggeredFromPreviousCollapsedSecton = collapsedNode.triggeredFromPreviousCollapsedSecton
         
         if triggeredFromPreviousCollapsedSecton {
-            let firstDeleteIndex = collapsedNode.topNode!.visibleTraversalIndex()! + 1
+            let firstDeleteIndex = collapsedNode.anchorNode.visibleTraversalIndex()! + 1
             tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: firstDeleteIndex, inSection: 0)], withRowAnimation: animationStyle)
         }
         

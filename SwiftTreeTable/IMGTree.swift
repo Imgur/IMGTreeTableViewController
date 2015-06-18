@@ -449,35 +449,33 @@ class IMGTreeActionNode : IMGTreeNode {
 class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     /**
-        The node that this node was triggered from
+        The anchor or top level node this collapsed node is ancestor to
     */
-    var topNode: IMGTreeNode?
+    override var anchorNode: IMGTreeNode {
+        return originatingNode.anchorNode
+    }
     /**
         The node that this node was triggered from
     */
-    var bottomNode: IMGTreeNode?
+    let originatingNode: IMGTreeNode
     /**
-        The node that this node was triggered from
+        The original anchors subtree
     */
-    var originalTopNode: IMGTreeNode
-    /**
-        The original node that this node was triggered from
-    */
-    var originatingNode: IMGTreeNode
+    let originalAnchorNode: IMGTreeNode
     
     var triggeredFromPreviousCollapsedSecton: Bool {
         if (parentNode != nil) {
-            return originalTopNode.children.first!.isKindOfClass(IMGTreeCollapsedSectionNode)
+            return originalAnchorNode.children.first!.isKindOfClass(IMGTreeCollapsedSectionNode)
         } else {
-            return topNode!.children.first!.isKindOfClass(IMGTreeCollapsedSectionNode)
+            return anchorNode.children.first!.isKindOfClass(IMGTreeCollapsedSectionNode)
         }
     }
     
     var indicesToBeHidden: NSIndexSet {
         let rowsDeleted = NSMutableIndexSet()
         
-        var firstRemovalIndex = topNode!.visibleTraversalIndex()! + 1
-        var removeRange = topNode!.visibleTraversalCount()
+        var firstRemovalIndex = anchorNode.visibleTraversalIndex()! + 1
+        var removeRange = anchorNode.visibleTraversalCount()
         
         if triggeredFromPreviousCollapsedSecton {
             firstRemovalIndex++
@@ -492,14 +490,14 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     var indicesForContainingNodes: [NSIndexPath] {
         var rowsToHide: [NSIndexPath] = []
         
-        rowsToHide.extend(bottomNode!.indicesForTraversal())
-        bottomNode?.children.map({ (var child: IMGTreeNode) -> IMGTreeNode in
+        rowsToHide.extend(originatingNode.indicesForTraversal())
+        originatingNode.children.map({ (var child: IMGTreeNode) -> IMGTreeNode in
             child.isVisible = false
             return child
         })
         
-        rowsToHide.append(NSIndexPath(forRow: bottomNode!.visibleTraversalIndex()!, inSection: 0))
-        bottomNode?.isVisible = false
+        rowsToHide.append(NSIndexPath(forRow: originatingNode.visibleTraversalIndex()!, inSection: 0))
+        originatingNode.isVisible = false
         
         rowsToHide.append(NSIndexPath(forRow: visibleTraversalIndex()!, inSection: 0))
         isVisible = false
@@ -508,22 +506,11 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     }
     
     var nodesToBeHidden: [IMGTreeNode] {
-        var nodes = topNode!.infixTraversal()
+        var nodes = anchorNode.infixTraversal()
         return nodes
     }
     
     // MARK: Initializers
-    
-    /**
-        Initialize a section with the defining bottom and top node
-    */
-    init(topNode: IMGTreeNode, bottomNode: IMGTreeNode){
-        self.topNode = topNode
-        self.bottomNode = bottomNode
-        self.originatingNode = bottomNode.parentNode!
-        self.originalTopNode = topNode.copy() as! IMGTreeNode
-        super.init(parentNode: topNode)
-    }
     
     required init(parentNode nodesParent: IMGTreeNode) {
         fatalError("init(parentNode:) has not been implemented")
@@ -533,20 +520,23 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
         fatalError("init(coder:) has not been implemented")
     }
     
-    required convenience init(parentNode: IMGTreeNode, isVisible: Bool) {
-        fatalError("init(parentNode:isVisible:) has not been implemented")
-//        self.init(topNode: parentNode, bottomNode: parentNode.children.first!)
+    required init(parentNode: IMGTreeNode, isVisible: Bool) {
+        self.originatingNode = parentNode
+        self.originalAnchorNode = parentNode.anchorNode.copy() as! IMGTreeNode
+        super.init(parentNode: parentNode)
     }
+    
+    // MARK: Insertion and removal
     
     func insertCollapsedSectionIntoTree() -> [NSIndexPath] {
         var indices: [NSIndexPath] = []
         isVisible = true
-        topNode?.addChild(self)
+        anchorNode.addChild(self)
         indices.append(NSIndexPath(forRow: visibleTraversalIndex()!, inSection: 0))
-        addChild(bottomNode!)
-        bottomNode!.isVisible = true
-        indices.append(NSIndexPath(forRow: bottomNode!.visibleTraversalIndex()!, inSection: 0))
-        for child in bottomNode!.children {
+        addChild(originatingNode)
+        originatingNode.isVisible = true
+        indices.append(NSIndexPath(forRow: originatingNode.visibleTraversalIndex()!, inSection: 0))
+        for child in originatingNode.children {
             child.isVisible = true
             indices.append(NSIndexPath(forRow: child.visibleTraversalIndex()!, inSection: 0))
         }
@@ -556,8 +546,8 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     func restoreCollapsedSection() -> [NSIndexPath] {
         var indices: [NSIndexPath] = []
         
-        topNode?.children = originalTopNode.children
-        let restoredIndices = topNode!.indicesForTraversal()
+        anchorNode.children = originalAnchorNode.children
+        let restoredIndices = anchorNode.indicesForTraversal()
         indices.extend(restoredIndices)
         
         return restoredIndices
@@ -566,7 +556,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     //MARK: NSCopying
     
    override  func copyWithZone(zone: NSZone) -> AnyObject {
-        var nodeCopy = self.dynamicType(parentNode: originalTopNode, isVisible: isVisible)
+        var nodeCopy = self.dynamicType(parentNode: originalAnchorNode, isVisible: isVisible)
         nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in
             return childNode.copy() as! IMGTreeNode
         })
