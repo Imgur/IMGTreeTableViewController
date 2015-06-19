@@ -494,7 +494,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     /**
         The node that this node was triggered from
     */
-    private let originatingNode: IMGTreeNode
+    let originatingNode: IMGTreeNode
     /**
         The original anchors subtree
     */

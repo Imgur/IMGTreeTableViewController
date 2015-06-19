@@ -168,7 +168,14 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
         assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) - nodesToHide.count, "during collapsed section insertion: deleted nodes and indices count not equivalent")
         tableView.deleteRowsAtIndexPaths(indices, withRowAnimation: animationStyle)
         
-        let indicesToShow = collapsedNode.insertCollapsedSectionIntoTree()
+        var indicesToShow = collapsedNode.insertCollapsedSectionIntoTree()
+        
+        selectionNode = IMGTreeSelectionNode(parentNode: collapsedNode.originatingNode)
+        collapsedNode.originatingNode.addChild(self.selectionNode!)
+        self.selectionNode?.isVisible = true
+        
+        let lastIndice = indicesToShow.last!
+        indicesToShow.append(NSIndexPath(forRow: lastIndice.row + 1, inSection: 0))
         
         assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) + indicesToShow.count, "during collapsed section insertion: inserted nodes and indices count not equivalent")
         tableView.insertRowsAtIndexPaths(indicesToShow, withRowAnimation: animationStyle)
