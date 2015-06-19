@@ -44,6 +44,7 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
             break
         }
         cell.backgroundColor = backgroundColors[(node.depth) % backgroundColors.count]
+        cell.textLabel?.textColor = UIColor.cloudsColor()
         cell.selectionStyle = .None
         return cell
     }

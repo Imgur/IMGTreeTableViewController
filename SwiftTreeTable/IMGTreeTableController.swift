@@ -11,8 +11,7 @@ import UIKit
 /**
     Defines methods a controller should implement to feed UITableViewCell's to the IMGTreeTableController
 */
-@objc(IMGTreeTableControllerDelegate)
-protocol IMGTreeTableControllerDelegate {
+@objc protocol IMGTreeTableControllerDelegate {
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
     func collapsedCell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
     optional func actionCell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
@@ -22,8 +21,7 @@ protocol IMGTreeTableControllerDelegate {
 /**
     This class is to be used with its tableview convenience methods to modify the contained IMGTree and alter the UITableView
 */
-@objc(IMGTreeTableController)
-class IMGTreeTableController: NSObject, UITableViewDataSource{
+@objc class IMGTreeTableController: NSObject, UITableViewDataSource{
     
     /**
         Delegate conformance is required for constructing table view cells to use representing the nodes in the tree
@@ -172,9 +170,6 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
         
         assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) + indicesToShow.count, "during collapsed section insertion: inserted nodes and indices count not equivalent")
         tableView.insertRowsAtIndexPaths(indicesToShow, withRowAnimation: animationStyle)
-        if !triggeredFromPreviousCollapsedSecton {
-//            tableView.insertRowsAtIndexPaths([collapsedNode.visibleTraversalIndex()!], withRowAnimation: animationStyle)
-        }
     }
     
     private func restoreCollapsedSection(collapsedNode: IMGTreeCollapsedSectionNode, animated: Bool) {
@@ -189,10 +184,6 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
         let nodeIndicesToHide = collapsedNode.indicesForContainingNodes
         assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) - nodeIndicesToHide.count, "during collapsed section restore: deleted nodes and indices count not equivalent")
         tableView.deleteRowsAtIndexPaths(nodeIndicesToHide, withRowAnimation: animationStyle)
-        
-        if !triggeredFromPreviousCollapsedSecton {
-//            tableView.insertRowsAtIndexPaths([collapsedNode.visibleTraversalIndex()!], withRowAnimation: animationStyle)
-        }
         
         //restore old nodes
         var needsSelection = false

@@ -4,8 +4,7 @@ import UIKit
 /**
     This protocol allows a given class to fully configure an IMGTree instance with any given object graph
 */
-@objc(IMGTreeConstructorDelegate)
-protocol IMGTreeConstructorDelegate : class {
+@objc protocol IMGTreeConstructorDelegate : class {
     /**
         For a given model object instance representing a node, return that objects children if any
     */
@@ -23,8 +22,7 @@ protocol IMGTreeConstructorDelegate : class {
 /**
     Provides structure to a nested object graph such that it can be used in a UITableView or UICollectionView
 */
-@objc(IMGTree)
-class IMGTree: NSObject, NSCoding {
+@objc class IMGTree: NSObject, NSCoding {
     
     /**
         Defines the root node which is never displayed on screen but contains the top level nodes
@@ -476,7 +474,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     private let originalAnchorNode: IMGTreeNode
     
     var triggeredFromPreviousCollapsedSecton: Bool {
-        if (parentNode != nil) {
+        if parentNode != nil {
             return originalAnchorNode.children.first!.isKindOfClass(IMGTreeCollapsedSectionNode)
         } else {
             return anchorNode.children.first!.isKindOfClass(IMGTreeCollapsedSectionNode)
@@ -506,11 +504,6 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
         
         var firstRemovalIndex = anchorNode.visibleTraversalIndex()! + 1
         var removeRange = anchorNode.visibleTraversalCount()
-        
-        if triggeredFromPreviousCollapsedSecton {
-//            firstRemovalIndex++
-//            removeRange--
-        }
         
         rowsDeleted.addIndexesInRange(NSMakeRange(firstRemovalIndex, removeRange))
         
