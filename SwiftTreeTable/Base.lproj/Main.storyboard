@@ -1,34 +1,49 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Atq-wm-VXK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="VJP-ze-m5P">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
-        <scene sceneID="KbP-lN-boZ">
+        <scene sceneID="SVA-ga-LJI">
             <objects>
-                <tableViewController id="Atq-wm-VXK" customClass="ViewController" customModule="SwiftTreeTable" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="8hT-Zl-vgv">
+                <viewController id="VJP-ze-m5P" customClass="ViewController" customModule="SwiftTreeTable" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="GMd-ea-0nm"/>
+                        <viewControllerLayoutGuide type="bottom" id="WPP-ri-Amb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Pu3-ZA-8wF">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="8hT-Zl-vgv">
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="64o-HO-BSp">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="64o-HO-BSp" id="Jsw-b3-3Vw">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="64o-HO-BSp">
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="64o-HO-BSp" id="Jsw-b3-3Vw">
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="Atq-wm-VXK" id="1Ea-HM-573"/>
-                            <outlet property="delegate" destination="Atq-wm-VXK" id="UMm-xH-fQP"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="eL9-MR-XHZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="8hT-Zl-vgv" secondAttribute="trailing" id="JyZ-7L-1g5"/>
+                            <constraint firstItem="8hT-Zl-vgv" firstAttribute="leading" secondItem="Pu3-ZA-8wF" secondAttribute="leading" id="KNX-oE-XVA"/>
+                            <constraint firstItem="WPP-ri-Amb" firstAttribute="top" secondItem="8hT-Zl-vgv" secondAttribute="bottom" id="kLr-Jc-geO"/>
+                            <constraint firstItem="8hT-Zl-vgv" firstAttribute="top" secondItem="GMd-ea-0nm" secondAttribute="bottom" id="q1L-mt-VWg"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="8hT-Zl-vgv" id="Tjx-b5-TJo"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2sJ-Hm-cDT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="933" y="565"/>
+            <point key="canvasLocation" x="1774" y="592"/>
         </scene>
     </scenes>
 </document>
