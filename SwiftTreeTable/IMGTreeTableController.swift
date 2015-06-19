@@ -166,7 +166,14 @@ import UIKit
         assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) - nodesToHide.count, "during collapsed section insertion: deleted nodes and indices count not equivalent")
         tableView.deleteRowsAtIndexPaths(indices, withRowAnimation: animationStyle)
         
-        let indicesToShow = collapsedNode.insertCollapsedSectionIntoTree()
+        var indicesToShow = collapsedNode.insertCollapsedSectionIntoTree()
+        
+        selectionNode = IMGTreeSelectionNode(parentNode: collapsedNode.originatingNode)
+        collapsedNode.originatingNode.addChild(self.selectionNode!)
+        self.selectionNode?.isVisible = true
+        
+        let lastIndice = indicesToShow.last!
+        indicesToShow.append(NSIndexPath(forRow: lastIndice.row + 1, inSection: 0))
         
         assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) + indicesToShow.count, "during collapsed section insertion: inserted nodes and indices count not equivalent")
         tableView.insertRowsAtIndexPaths(indicesToShow, withRowAnimation: animationStyle)
@@ -198,6 +205,14 @@ import UIKit
             })
             collapsedNode.anchorNode.children.insert(selectionNode!, atIndex: 0)
         }
+        //we need to also restore the selectionNode and actionNode properties if a selection node existed in the restored subtreee
+        if let priorSelection = collapsedNode.anchorNode.selectionNodeInTraversal() {
+            selectionNode = priorSelection
+        }
+        if let priorAction = collapsedNode.anchorNode.actionNodeInTraversal() {
+            actionNode = priorAction
+        }
+        
         assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) + nodeIndicesToShow.count, "during collapsed section restore: inserted nodes and indices count not equivalent")
         tableView.insertRowsAtIndexPaths(nodeIndicesToShow, withRowAnimation: animationStyle)
     }

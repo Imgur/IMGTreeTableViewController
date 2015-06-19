@@ -314,6 +314,19 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
         isVisible = false
         parentNode?.removeChild(self)
     }
+    /**
+    Does this node have a selection node as a child
+    */
+    func selectionNodeInTraversal() -> IMGTreeSelectionNode? {
+        return findTraversalNode(IMGTreeSelectionNode) as? IMGTreeSelectionNode
+    }
+    
+    /**
+    Does this node have an action node as a child
+    */
+    func actionNodeInTraversal() -> IMGTreeActionNode? {
+        return findTraversalNode(IMGTreeActionNode) as? IMGTreeActionNode
+    }
     
     /**
         Finds the location, if any, of the node with this instances children regardless of visibility
@@ -421,6 +434,18 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
         return filtered.first
     }
     
+    /**
+        Finds a child node in the visible of the specificed class
+    */
+    private func findTraversalNode(ofClass: AnyClass) -> IMGTreeNode? {
+        let traversal = infixTraversal()
+        let filtered = traversal.filter({ (node) -> Bool in
+            return node.isKindOfClass(ofClass)
+        })
+        
+        return filtered.first
+    }
+    
     //MARK: DebugPrintable
     
     override var description : String {
@@ -467,7 +492,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     /**
         The node that this node was triggered from
     */
-    private let originatingNode: IMGTreeNode
+    let originatingNode: IMGTreeNode
     /**
         The original anchors subtree
     */
