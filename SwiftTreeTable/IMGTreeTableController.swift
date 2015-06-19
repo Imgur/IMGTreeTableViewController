@@ -207,6 +207,14 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
             })
             collapsedNode.anchorNode.children.insert(selectionNode!, atIndex: 0)
         }
+        //we need to also restore the selectionNode and actionNode properties if a selection node existed in the restored subtreee
+        if let priorSelection = collapsedNode.anchorNode.selectionNodeInTraversal() {
+            selectionNode = priorSelection
+        }
+        if let priorAction = collapsedNode.anchorNode.actionNodeInTraversal() {
+            actionNode = priorAction
+        }
+        
         assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) + nodeIndicesToShow.count, "during collapsed section restore: inserted nodes and indices count not equivalent")
         tableView.insertRowsAtIndexPaths(nodeIndicesToShow, withRowAnimation: animationStyle)
     }
