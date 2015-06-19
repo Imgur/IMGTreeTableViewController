@@ -13,34 +13,20 @@
 		24C3DE911AC4B617008E3087 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24C3DE8F1AC4B617008E3087 /* Main.storyboard */; };
 		24C3DE931AC4B617008E3087 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C3DE921AC4B617008E3087 /* Images.xcassets */; };
 		24C3DE961AC4B617008E3087 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24C3DE941AC4B617008E3087 /* LaunchScreen.xib */; };
-		24C3DEA21AC4B617008E3087 /* SwiftTreeTableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DEA11AC4B617008E3087 /* SwiftTreeTableTests.swift */; };
 		24C3DEAE1AC4B7A9008E3087 /* IMGTreeTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DEAD1AC4B7A9008E3087 /* IMGTreeTableController.swift */; };
 		24C3DEB01AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */; };
 		24C8052C1ACB449800440864 /* IMGTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C8052B1ACB449800440864 /* IMGTree.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		24C3DE9C1AC4B617008E3087 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 24C3DE7E1AC4B617008E3087 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 24C3DE851AC4B617008E3087;
-			remoteInfo = SwiftTreeTable;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		24993F231B32427A007C9124 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
-		24C3DE861AC4B617008E3087 /* SwiftTreeTable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftTreeTable.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		24C3DE861AC4B617008E3087 /* IMGTreeTableView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IMGTreeTableView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24C3DE8A1AC4B617008E3087 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24C3DE8B1AC4B617008E3087 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		24C3DE8D1AC4B617008E3087 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		24C3DE901AC4B617008E3087 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		24C3DE921AC4B617008E3087 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		24C3DE951AC4B617008E3087 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		24C3DE9B1AC4B617008E3087 /* SwiftTreeTableTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftTreeTableTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		24C3DEA01AC4B617008E3087 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		24C3DEA11AC4B617008E3087 /* SwiftTreeTableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTreeTableTests.swift; sourceTree = "<group>"; };
 		24C3DEAD1AC4B7A9008E3087 /* IMGTreeTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGTreeTableController.swift; sourceTree = "<group>"; };
 		24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGSampleTreeConstructor.swift; sourceTree = "<group>"; };
 		24C8052B1ACB449800440864 /* IMGTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGTree.swift; sourceTree = "<group>"; };
@@ -54,21 +40,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		24C3DE981AC4B617008E3087 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		24C3DE7D1AC4B617008E3087 = {
 			isa = PBXGroup;
 			children = (
-				24C3DE881AC4B617008E3087 /* SwiftTreeTable */,
-				24C3DE9E1AC4B617008E3087 /* SwiftTreeTableTests */,
+				24C3DE881AC4B617008E3087 /* IMGTreeTableView */,
 				24C3DE871AC4B617008E3087 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -76,13 +54,12 @@
 		24C3DE871AC4B617008E3087 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				24C3DE861AC4B617008E3087 /* SwiftTreeTable.app */,
-				24C3DE9B1AC4B617008E3087 /* SwiftTreeTableTests.xctest */,
+				24C3DE861AC4B617008E3087 /* IMGTreeTableView.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		24C3DE881AC4B617008E3087 /* SwiftTreeTable */ = {
+		24C3DE881AC4B617008E3087 /* IMGTreeTableView */ = {
 			isa = PBXGroup;
 			children = (
 				24C3DE8B1AC4B617008E3087 /* AppDelegate.swift */,
@@ -96,7 +73,7 @@
 				24C3DE891AC4B617008E3087 /* Supporting Files */,
 				24C3DE8D1AC4B617008E3087 /* ViewController.swift */,
 			);
-			path = SwiftTreeTable;
+			path = IMGTreeTableView;
 			sourceTree = "<group>";
 		};
 		24C3DE891AC4B617008E3087 /* Supporting Files */ = {
@@ -107,29 +84,12 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		24C3DE9E1AC4B617008E3087 /* SwiftTreeTableTests */ = {
-			isa = PBXGroup;
-			children = (
-				24C3DEA11AC4B617008E3087 /* SwiftTreeTableTests.swift */,
-				24C3DE9F1AC4B617008E3087 /* Supporting Files */,
-			);
-			path = SwiftTreeTableTests;
-			sourceTree = "<group>";
-		};
-		24C3DE9F1AC4B617008E3087 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				24C3DEA01AC4B617008E3087 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		24C3DE851AC4B617008E3087 /* SwiftTreeTable */ = {
+		24C3DE851AC4B617008E3087 /* IMGTreeTableView */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 24C3DEA51AC4B617008E3087 /* Build configuration list for PBXNativeTarget "SwiftTreeTable" */;
+			buildConfigurationList = 24C3DEA51AC4B617008E3087 /* Build configuration list for PBXNativeTarget "IMGTreeTableView" */;
 			buildPhases = (
 				24C3DE821AC4B617008E3087 /* Sources */,
 				24C3DE831AC4B617008E3087 /* Frameworks */,
@@ -139,28 +99,10 @@
 			);
 			dependencies = (
 			);
-			name = SwiftTreeTable;
+			name = IMGTreeTableView;
 			productName = SwiftTreeTable;
-			productReference = 24C3DE861AC4B617008E3087 /* SwiftTreeTable.app */;
+			productReference = 24C3DE861AC4B617008E3087 /* IMGTreeTableView.app */;
 			productType = "com.apple.product-type.application";
-		};
-		24C3DE9A1AC4B617008E3087 /* SwiftTreeTableTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 24C3DEA81AC4B617008E3087 /* Build configuration list for PBXNativeTarget "SwiftTreeTableTests" */;
-			buildPhases = (
-				24C3DE971AC4B617008E3087 /* Sources */,
-				24C3DE981AC4B617008E3087 /* Frameworks */,
-				24C3DE991AC4B617008E3087 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				24C3DE9D1AC4B617008E3087 /* PBXTargetDependency */,
-			);
-			name = SwiftTreeTableTests;
-			productName = SwiftTreeTableTests;
-			productReference = 24C3DE9B1AC4B617008E3087 /* SwiftTreeTableTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -174,13 +116,9 @@
 					24C3DE851AC4B617008E3087 = {
 						CreatedOnToolsVersion = 6.2;
 					};
-					24C3DE9A1AC4B617008E3087 = {
-						CreatedOnToolsVersion = 6.2;
-						TestTargetID = 24C3DE851AC4B617008E3087;
-					};
 				};
 			};
-			buildConfigurationList = 24C3DE811AC4B617008E3087 /* Build configuration list for PBXProject "SwiftTreeTable" */;
+			buildConfigurationList = 24C3DE811AC4B617008E3087 /* Build configuration list for PBXProject "IMGTreeTableView" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -193,8 +131,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				24C3DE851AC4B617008E3087 /* SwiftTreeTable */,
-				24C3DE9A1AC4B617008E3087 /* SwiftTreeTableTests */,
+				24C3DE851AC4B617008E3087 /* IMGTreeTableView */,
 			);
 		};
 /* End PBXProject section */
@@ -207,13 +144,6 @@
 				24C3DE911AC4B617008E3087 /* Main.storyboard in Resources */,
 				24C3DE961AC4B617008E3087 /* LaunchScreen.xib in Resources */,
 				24C3DE931AC4B617008E3087 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		24C3DE991AC4B617008E3087 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,23 +163,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		24C3DE971AC4B617008E3087 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				24C3DEA21AC4B617008E3087 /* SwiftTreeTableTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		24C3DE9D1AC4B617008E3087 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 24C3DE851AC4B617008E3087 /* SwiftTreeTable */;
-			targetProxy = 24C3DE9C1AC4B617008E3087 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		24C3DE8F1AC4B617008E3087 /* Main.storyboard */ = {
@@ -352,9 +266,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = SwiftTreeTable/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/IMGTreeTableView/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = IMGTreeTableView;
 			};
 			name = Debug;
 		};
@@ -362,50 +276,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = SwiftTreeTable/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/IMGTreeTableView/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		24C3DEA91AC4B617008E3087 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = SwiftTreeTableTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftTreeTable.app/SwiftTreeTable";
-			};
-			name = Debug;
-		};
-		24C3DEAA1AC4B617008E3087 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = SwiftTreeTableTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftTreeTable.app/SwiftTreeTable";
+				PRODUCT_NAME = IMGTreeTableView;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		24C3DE811AC4B617008E3087 /* Build configuration list for PBXProject "SwiftTreeTable" */ = {
+		24C3DE811AC4B617008E3087 /* Build configuration list for PBXProject "IMGTreeTableView" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				24C3DEA31AC4B617008E3087 /* Debug */,
@@ -414,20 +294,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		24C3DEA51AC4B617008E3087 /* Build configuration list for PBXNativeTarget "SwiftTreeTable" */ = {
+		24C3DEA51AC4B617008E3087 /* Build configuration list for PBXNativeTarget "IMGTreeTableView" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				24C3DEA61AC4B617008E3087 /* Debug */,
 				24C3DEA71AC4B617008E3087 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		24C3DEA81AC4B617008E3087 /* Build configuration list for PBXNativeTarget "SwiftTreeTableTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				24C3DEA91AC4B617008E3087 /* Debug */,
-				24C3DEAA1AC4B617008E3087 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

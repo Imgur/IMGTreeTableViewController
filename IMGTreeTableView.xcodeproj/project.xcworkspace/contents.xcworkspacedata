@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:SwiftTreeTable.xcodeproj">
+      location = "self:/Users/geoffmacdonald/Development/SwiftTreeTable/IMGTreeTableView.xcodeproj">
    </FileRef>
 </Workspace>
