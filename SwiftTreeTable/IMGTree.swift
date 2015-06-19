@@ -210,6 +210,18 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
             return currentNode
         }
     }
+    
+    var collapsedAnchorNode: IMGTreeNode {
+        get {
+            var currentNode: IMGTreeNode = self
+            
+            while currentNode.parentNode?.parentNode != nil && !currentNode.parentNode!.parentNode!.isKindOfClass(IMGTreeCollapsedSectionNode.self) {
+                currentNode = currentNode.parentNode!
+            }
+            
+            return currentNode
+        }
+    }
     /**
         Is the node visible within the tree?
     */
@@ -304,20 +316,6 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
         isVisible = false
         parentNode?.removeChild(self)
     }
-    
-    /**
-        Does this node have a selection node as a child
-    */
-//    func hasSelectionNode() -> Bool {
-//        return findChildNode(IMGTreeSelectionNode) != nil
-//    }
-    
-    /**
-        Does this node have an action node as a child
-    */
-//    func hasActionNode() -> Bool {
-//        return findChildNode(IMGTreeActionNode) != nil
-//    }
     
     /**
         Finds the location, if any, of the node with this instances children regardless of visibility
@@ -466,7 +464,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
         The anchor or top level node this collapsed node is ancestor to
     */
     override var anchorNode: IMGTreeNode {
-        return originatingNode.anchorNode
+        return originatingNode.collapsedAnchorNode
     }
     /**
         The node that this node was triggered from
@@ -536,7 +534,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     required init(parentNode: IMGTreeNode, isVisible: Bool) {
         self.originatingNode = parentNode
-        self.originalAnchorNode = parentNode.anchorNode.copy() as! IMGTreeNode
+        self.originalAnchorNode = parentNode.collapsedAnchorNode.copy() as! IMGTreeNode
         super.init(parentNode: parentNode)
     }
     
@@ -560,14 +558,9 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     func restoreCollapsedSection() -> [NSIndexPath] {
         
-        var selectedNode: IMGTreeSelectionNode?
-        if anchorNode.isSelected {
-            selectedNode = anchorNode.children.first as? IMGTreeSelectionNode
-        }
         anchorNode.children = originalAnchorNode.children
-        if selectedNode != nil {
-            anchorNode.children.insert(selectedNode!, atIndex: 0)
-            selectedNode?.parentNode = anchorNode
+        for node in anchorNode.children {
+            node.isVisible = true
         }
         
         let restoredIndices = anchorNode.visibleIndicesForTraversal()
@@ -577,7 +570,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     //MARK: NSCopying
     
    override  func copyWithZone(zone: NSZone) -> AnyObject {
-        var nodeCopy = self.dynamicType(parentNode: originalAnchorNode, isVisible: isVisible)
+        var nodeCopy = self.dynamicType(parentNode: originatingNode, isVisible: isVisible)
         nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in
             return childNode.copy() as! IMGTreeNode
         })

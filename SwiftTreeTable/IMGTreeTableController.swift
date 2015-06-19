@@ -117,7 +117,6 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
                     restoreCollapsedSection(collapsedSection, animated: true)
                 } else if !node.isChildrenVisible && node.collapsedDepth > collapsedSectionDepth {
                     
-//                    println("node.depth = \(node.depth)")
                     let collapsedNode = IMGTreeCollapsedSectionNode(parentNode: node, isVisible: false)
                     insertCollapsedSectionIntoTree(collapsedNode, animated: true)
                     
@@ -163,15 +162,15 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
         assert(nodesToHide.count == nodeIndicesToHide.count, "deleted nodes and indices count not equivalent")
         var indices: [NSIndexPath] = []
         nodeIndicesToHide.enumerateIndexesUsingBlock({ (rowIndex: NSInteger, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-            println("hiding \(rowIndex)")
             indices.append(NSIndexPath(forRow: rowIndex, inSection: 0))
         })
+        
+        assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) - nodesToHide.count, "during collapsed section insertion: deleted nodes and indices count not equivalent")
         tableView.deleteRowsAtIndexPaths(indices, withRowAnimation: animationStyle)
         
         let indicesToShow = collapsedNode.insertCollapsedSectionIntoTree()
-        for index in indicesToShow {
-            println("showing \(index.row)")
-        }
+        
+        assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) + indicesToShow.count, "during collapsed section insertion: inserted nodes and indices count not equivalent")
         tableView.insertRowsAtIndexPaths(indicesToShow, withRowAnimation: animationStyle)
         if !triggeredFromPreviousCollapsedSecton {
 //            tableView.insertRowsAtIndexPaths([collapsedNode.visibleTraversalIndex()!], withRowAnimation: animationStyle)
@@ -188,6 +187,7 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
         
         //delete  the containing nodes of the bottom node
         let nodeIndicesToHide = collapsedNode.indicesForContainingNodes
+        assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) - nodeIndicesToHide.count, "during collapsed section restore: deleted nodes and indices count not equivalent")
         tableView.deleteRowsAtIndexPaths(nodeIndicesToHide, withRowAnimation: animationStyle)
         
         if !triggeredFromPreviousCollapsedSecton {
@@ -195,7 +195,19 @@ class IMGTreeTableController: NSObject, UITableViewDataSource{
         }
         
         //restore old nodes
-        let nodeIndicesToShow = collapsedNode.restoreCollapsedSection()
+        var needsSelection = false
+        if collapsedNode.anchorNode.isSelected {
+            needsSelection = true
+        }
+        var nodeIndicesToShow = collapsedNode.restoreCollapsedSection()
+        if needsSelection{
+            nodeIndicesToShow = nodeIndicesToShow.map({ (var index: NSIndexPath) -> NSIndexPath in
+                index = NSIndexPath(forRow: index.row + 1, inSection: index.section)
+                return index
+            })
+            collapsedNode.anchorNode.children.insert(selectionNode!, atIndex: 0)
+        }
+        assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) + nodeIndicesToShow.count, "during collapsed section restore: inserted nodes and indices count not equivalent")
         tableView.insertRowsAtIndexPaths(nodeIndicesToShow, withRowAnimation: animationStyle)
     }
     
