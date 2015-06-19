@@ -11,15 +11,15 @@ import UIKit
 /**
     Defines methods a controller should implement to feed UITableViewCell's to the IMGTreeTableController
 */
-@objc protocol IMGTreeTableControllerDelegate {
+@objc public protocol IMGTreeTableControllerDelegate {
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
 }
 
 /**
     This class is to be used with its tableview convenience methods to modify the contained IMGTree and alter the UITableView
 */
-@objc class IMGTreeTableController: NSObject, UITableViewDataSource{
-    
+public class IMGTreeTableController: NSObject, UITableViewDataSource{
+
     /**
         Delegate conformance is required for constructing table view cells to use representing the nodes in the tree
     */
@@ -78,7 +78,7 @@ import UIKit
     
     //MARK: initializers
     
-    required init(tableView: UITableView, delegate: IMGTreeTableControllerDelegate) {
+    required public init(tableView: UITableView, delegate: IMGTreeTableControllerDelegate) {
         self.tableView = tableView
         self.delegate = delegate
         transactionInProgress = false
@@ -287,12 +287,12 @@ import UIKit
 
     //MARK: UITableViewDataSource
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         assert(tree != nil, "!! no tree set for indexPath: " + indexPath.description)
         return delegate.cell(tree!.rootNode.visibleNodeForIndex(indexPath.row)!, indexPath: indexPath)
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tree?.rootNode.visibleTraversalCount() ?? 0
     }
 }

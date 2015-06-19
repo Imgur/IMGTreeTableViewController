@@ -4,7 +4,7 @@ import UIKit
 /**
     This protocol allows a given class to fully configure an IMGTree instance with any given object graph
 */
-@objc protocol IMGTreeConstructorDelegate : class {
+@objc public protocol IMGTreeConstructorDelegate  {
     /**
         For a given model object instance representing a node, return that objects children if any
     */
@@ -22,14 +22,14 @@ import UIKit
 /**
     Provides structure to a nested object graph such that it can be used in a UITableView or UICollectionView
 */
-@objc class IMGTree: NSObject, NSCoding {
+public class IMGTree: NSObject, NSCoding {
     
     /**
         Defines the root node which is never displayed on screen but contains the top level nodes
     */
     let rootNode:IMGTreeNode
     
-    override init() {
+    public override init() {
         rootNode = IMGTreeNode()
     }
     
@@ -38,7 +38,7 @@ import UIKit
     /**
         Creates a new instance of IMGTree given the root level model objects and constructor object conforming to IMGTreeConstructorDelegate
     */
-    class func tree(fromRootArray rootArray: [AnyObject], withConstructerDelegate constructorDelegate: IMGTreeConstructorDelegate) -> IMGTree
+    public class func tree(fromRootArray rootArray: [AnyObject], withConstructerDelegate constructorDelegate: IMGTreeConstructorDelegate) -> IMGTree
     {
         let tree = IMGTree()
         let nodeClass = constructorDelegate.classForNode()
@@ -78,17 +78,17 @@ import UIKit
     
     //MARK: NSCoding
     
-    required convenience init(coder aDecoder: NSCoder) {
+    required convenience public init(coder aDecoder: NSCoder) {
         self.init()
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
+    public func encodeWithCoder(aCoder: NSCoder) {
         
     }
     
     //MARK: DebugPrintable
     
-    override var description : String {
+    public override var description : String {
         //print readable string
         var tableState = "Tree: rootnode: \(rootNode.description)\n"
         
@@ -103,7 +103,7 @@ import UIKit
 /**
     Represents an individual node which in turn represents a model object in a graph. Conforms to NSCopying in order to copy into subtree properties
 */
-class IMGTreeNode: NSObject, NSCoding, NSCopying {
+public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     
     /**
         The super node that owns this instance as part of it's children
@@ -260,7 +260,7 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
     /**
         Initialize under a parent node invisibily
     */
-    required init (parentNode nodesParent: IMGTreeNode) {
+    public required init (parentNode nodesParent: IMGTreeNode) {
         isVisible = false
         parentNode = nodesParent
         children = []
@@ -269,18 +269,18 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
     /**
         Initialize under a parent node setting visibility
     */
-    required convenience init(parentNode: IMGTreeNode, isVisible: Bool) {
+    public required convenience init(parentNode: IMGTreeNode, isVisible: Bool) {
         self.init(parentNode: parentNode)
         self.isVisible = isVisible
     }
     
     //MARK: NSCoding
     
-    required convenience init(coder aDecoder: NSCoder) {
+    public required convenience init(coder aDecoder: NSCoder) {
         self.init()
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
+    public func encodeWithCoder(aCoder: NSCoder) {
         
     }
     
@@ -448,13 +448,13 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
     
     //MARK: DebugPrintable
     
-    override var description : String {
+    public override var description : String {
         return "Node: \(rootNode.visibleIndexForNode(self)!) \n"
     }
     
     //MARK: NSCopying
     
-    func copyWithZone(zone: NSZone) -> AnyObject {
+    public func copyWithZone(zone: NSZone) -> AnyObject {
         let nodeCopy = self.dynamicType(parentNode: parentNode!, isVisible: isVisible)
         nodeCopy.parentNode = parentNode
         nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in
@@ -467,21 +467,21 @@ class IMGTreeNode: NSObject, NSCoding, NSCopying {
 /**
     Class for nodes that represent user 'selection' of a parent node
 */
-class IMGTreeSelectionNode : IMGTreeNode {
+public class IMGTreeSelectionNode : IMGTreeNode {
     
 }
 
 /**
     Class for nodes that represent actionables things on the parent
 */
-class IMGTreeActionNode : IMGTreeNode {
+public class IMGTreeActionNode : IMGTreeNode {
     
 }
 
 /**
     Class for nodes that represent collapsed sections
 */
-class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
+public class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     /**
         The anchor or top level node this collapsed node is ancestor to
@@ -542,15 +542,15 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     // MARK: Initializers
     
-    required init(parentNode nodesParent: IMGTreeNode) {
+    public required init(parentNode nodesParent: IMGTreeNode) {
         fatalError("init(parentNode:) has not been implemented")
     }
     
-    required convenience init(coder aDecoder: NSCoder) {
+    public required convenience init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    required init(parentNode: IMGTreeNode, isVisible: Bool) {
+    public required init(parentNode: IMGTreeNode, isVisible: Bool) {
         self.originatingNode = parentNode
         self.originalAnchorNode = parentNode.collapsedAnchorNode.copy() as! IMGTreeNode
         super.init(parentNode: parentNode)
@@ -587,7 +587,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     //MARK: NSCopying
     
-   override  func copyWithZone(zone: NSZone) -> AnyObject {
+   public override  func copyWithZone(zone: NSZone) -> AnyObject {
         var nodeCopy = self.dynamicType(parentNode: originatingNode, isVisible: isVisible)
         nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in
             return childNode.copy() as! IMGTreeNode
@@ -597,7 +597,7 @@ class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     //MARK: DebugPrintable
     
-    override var description : String {
+    public override var description : String {
         return "Collapsed Node: \(rootNode.visibleIndexForNode(self)!) \n"
     }
 }

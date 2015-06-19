@@ -9,7 +9,7 @@
     "Geoff MacDonald": "geoff@imgur.com",
     "Jasdev Singh": "jasdev@imgur.com"
   },
-  "summary": "A composable, arbitrarly deeply nested table view controller.",
+  "summary": "A composable, arbitrarly deeply nested table view controller. Ideal for nested comments",
   "homepage": "https://github.com/imgur/IMGTreeTableView",
   "platforms": {
     "ios": "7.0"
