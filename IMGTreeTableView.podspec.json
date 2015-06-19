@@ -1,0 +1,23 @@
+{
+  "name": "IMGTreeTableView",
+  "version": "0.1.0",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Geoff MacDonald": "geoff@imgur.com",
+    "Jasdev Singh": "jasdev@imgur.com"
+  },
+  "summary": "A composable, arbitrarly deeply nested table view controller.",
+  "homepage": "https://github.com/imgur/IMGTreeTableView",
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source": {
+    "git": "https://github.com/imgur/IMGTreeTableView.git",
+    "tag": "0.1.0"
+  },
+  "source_files": "IMGTreeTableView/*.swift",
+  "requires_arc": true
+}

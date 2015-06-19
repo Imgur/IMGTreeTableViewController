@@ -13,9 +13,6 @@ import UIKit
 */
 @objc protocol IMGTreeTableControllerDelegate {
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
-    func collapsedCell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
-    optional func actionCell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
-    optional func selectionCell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
 }
 
 /**

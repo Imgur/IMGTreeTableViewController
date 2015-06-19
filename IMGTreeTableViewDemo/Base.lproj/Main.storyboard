@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="VJP-ze-m5P">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="SVA-ga-LJI">
             <objects>
-                <viewController id="VJP-ze-m5P" customClass="ViewController" customModule="SwiftTreeTable" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="VJP-ze-m5P" customClass="ViewController" customModule="IMGTreeTableView" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="GMd-ea-0nm"/>
                         <viewControllerLayoutGuide type="bottom" id="WPP-ri-Amb"/>

@@ -12,10 +12,10 @@
 		24C3DE8E1AC4B617008E3087 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DE8D1AC4B617008E3087 /* ViewController.swift */; };
 		24C3DE911AC4B617008E3087 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24C3DE8F1AC4B617008E3087 /* Main.storyboard */; };
 		24C3DE931AC4B617008E3087 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C3DE921AC4B617008E3087 /* Images.xcassets */; };
-		24C3DE961AC4B617008E3087 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24C3DE941AC4B617008E3087 /* LaunchScreen.xib */; };
 		24C3DEB01AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */; };
 		24FC75511B349EB000F923BD /* IMGTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FC754F1B349EB000F923BD /* IMGTree.swift */; };
 		24FC75521B349EB000F923BD /* IMGTreeTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FC75501B349EB000F923BD /* IMGTreeTableController.swift */; };
+		24FC75561B34A44E00F923BD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24FC75541B34A44E00F923BD /* LaunchScreen.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,10 +26,10 @@
 		24C3DE8D1AC4B617008E3087 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		24C3DE901AC4B617008E3087 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		24C3DE921AC4B617008E3087 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		24C3DE951AC4B617008E3087 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGSampleTreeConstructor.swift; sourceTree = "<group>"; };
 		24FC754F1B349EB000F923BD /* IMGTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IMGTree.swift; path = IMGTreeTableView/IMGTree.swift; sourceTree = "<group>"; };
 		24FC75501B349EB000F923BD /* IMGTreeTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IMGTreeTableController.swift; path = IMGTreeTableView/IMGTreeTableController.swift; sourceTree = "<group>"; };
+		24FC75551B34A44E00F923BD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,11 +63,11 @@
 		24C3DE881AC4B617008E3087 /* IMGTreeTableViewDemo */ = {
 			isa = PBXGroup;
 			children = (
+				24FC75541B34A44E00F923BD /* LaunchScreen.xib */,
 				24C3DE8B1AC4B617008E3087 /* AppDelegate.swift */,
 				24C3DE921AC4B617008E3087 /* Images.xcassets */,
 				24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */,
 				24993F231B32427A007C9124 /* UIColorExtensions.swift */,
-				24C3DE941AC4B617008E3087 /* LaunchScreen.xib */,
 				24C3DE8F1AC4B617008E3087 /* Main.storyboard */,
 				24C3DE891AC4B617008E3087 /* Supporting Files */,
 				24C3DE8D1AC4B617008E3087 /* ViewController.swift */,
@@ -150,7 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24C3DE911AC4B617008E3087 /* Main.storyboard in Resources */,
-				24C3DE961AC4B617008E3087 /* LaunchScreen.xib in Resources */,
+				24FC75561B34A44E00F923BD /* LaunchScreen.xib in Resources */,
 				24C3DE931AC4B617008E3087 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -182,10 +182,10 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		24C3DE941AC4B617008E3087 /* LaunchScreen.xib */ = {
+		24FC75541B34A44E00F923BD /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				24C3DE951AC4B617008E3087 /* Base */,
+				24FC75551B34A44E00F923BD /* Base */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
@@ -275,6 +275,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "$(SRCROOT)/IMGTreeTableViewDemo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = IMGTreeTableView;
 			};
@@ -285,6 +286,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "$(SRCROOT)/IMGTreeTableViewDemo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = IMGTreeTableView;
 			};

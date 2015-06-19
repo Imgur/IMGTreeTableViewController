@@ -8,11 +8,14 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
     @IBOutlet var tableView: UITableView!
     
     let backgroundColors = [UIColor.whiteColor(), UIColor.turquoiseColor(), UIColor.greenSeaColor(), UIColor.emeraldColor(), UIColor.nephritisColor(), UIColor.peterRiverColor(), UIColor.belizeHoleColor(), UIColor.amethystColor(), UIColor.wisteriaColor(), UIColor.wetAsphaltColor()]
-
+    
+    // MARK: Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundColor = .turquoiseColor()
         tableView.delegate = self
+        tableView.tintColor = UIColor.whiteColor()
         view.backgroundColor = .turquoiseColor()
         
         let construction = IMGSampleTreeConstructor()
@@ -24,6 +27,8 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
         super.viewDidAppear(animated)
         controller.tree = tree
     }
+    
+    // MARK: IMGTreeTableControllerDelegate
     
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UITableViewCell
@@ -49,9 +54,7 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
         return cell
     }
     
-    func collapsedCell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell {
-        return cell(node, indexPath: indexPath)
-    }
+    // MARK: UITableViewDelegate
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         controller.didSelectRow(indexPath)
