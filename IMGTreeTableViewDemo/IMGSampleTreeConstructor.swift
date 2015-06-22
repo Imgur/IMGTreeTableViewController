@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import IMGTreeTableView
 
 class IMGCommentNode: IMGTreeNode, NSCopying {
     var comment: String?
