@@ -27,7 +27,7 @@ public class IMGTree: NSObject, NSCoding {
     /**
         Defines the root node which is never displayed on screen but contains the top level nodes
     */
-    let rootNode:IMGTreeNode
+    let rootNode: IMGTreeNode
     
     public override init() {
         rootNode = IMGTreeNode()
@@ -112,7 +112,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     /**
         This node's children nodes
     */
-    var children: [IMGTreeNode] {
+    var children: [IMGTreeNode] = [] {
         didSet {
             children = children.map({ (var node: IMGTreeNode) -> IMGTreeNode in
                 node.parentNode = self
@@ -136,7 +136,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     /**
         The depth of this node in the treee as calculated by recursively calling the parent node.
     */
-    var depth: Int {
+    public var depth: Int {
         var currentNode: IMGTreeNode = self
         var depth = 0
         
@@ -223,7 +223,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     /**
         Is the node visible within the tree?
     */
-    var isVisible: Bool {
+    var isVisible: Bool = false {
         willSet {
             //keep track of prior subtree visibility
             previousVisibleIndex = visibleTraversalIndex()
@@ -253,31 +253,22 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     //MARK: Initializers
     
     override init() {
-        isVisible = false
-        children = []
+        
     }
     
     /**
         Initialize under a parent node invisibily
     */
     public required init (parentNode nodesParent: IMGTreeNode) {
-        isVisible = false
+        super.init()
         parentNode = nodesParent
-        children = []
     }
     
-    /**
-        Initialize under a parent node setting visibility
-    */
-    public required convenience init(parentNode: IMGTreeNode, isVisible: Bool) {
-        self.init(parentNode: parentNode)
-        self.isVisible = isVisible
-    }
     
     //MARK: NSCoding
     
-    public required convenience init(coder aDecoder: NSCoder) {
-        self.init()
+    public required init(coder aDecoder: NSCoder) {
+        fatalError("")
     }
     
     public func encodeWithCoder(aCoder: NSCoder) {
@@ -455,7 +446,8 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     //MARK: NSCopying
     
     public func copyWithZone(zone: NSZone) -> AnyObject {
-        let nodeCopy = self.dynamicType(parentNode: parentNode!, isVisible: isVisible)
+        let nodeCopy = self.dynamicType(parentNode: parentNode!)
+        nodeCopy.isVisible = isVisible
         nodeCopy.parentNode = parentNode
         nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in
             return childNode.copy() as! IMGTreeNode
@@ -542,15 +534,11 @@ public class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     // MARK: Initializers
     
-    public required init(parentNode nodesParent: IMGTreeNode) {
-        fatalError("init(parentNode:) has not been implemented")
-    }
-    
-    public required convenience init(coder aDecoder: NSCoder) {
+    public required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public required init(parentNode: IMGTreeNode, isVisible: Bool) {
+    public required init(parentNode: IMGTreeNode) {
         self.originatingNode = parentNode
         self.originalAnchorNode = parentNode.collapsedAnchorNode.copy() as! IMGTreeNode
         super.init(parentNode: parentNode)
@@ -588,7 +576,8 @@ public class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     //MARK: NSCopying
     
    public override  func copyWithZone(zone: NSZone) -> AnyObject {
-        var nodeCopy = self.dynamicType(parentNode: originatingNode, isVisible: isVisible)
+        var nodeCopy = self.dynamicType(parentNode: originatingNode)
+        nodeCopy.isVisible = isVisible
         nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in
             return childNode.copy() as! IMGTreeNode
         })

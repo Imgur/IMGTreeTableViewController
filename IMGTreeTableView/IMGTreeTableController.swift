@@ -35,7 +35,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     /**
         The tree representing the node tree displayed in the tableview. Can be nil, in which case the tableview is cleared at anytime.
     */
-    var tree: IMGTree? {
+    public var tree: IMGTree? {
         didSet {
             if tree != nil {
                 tree!.rootNode.isVisible = true
@@ -104,7 +104,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         }
     }
     
-    func didSelectRow(indexPath: NSIndexPath) {
+    public func didSelectRow(indexPath: NSIndexPath) {
         if let node = tree?.rootNode.visibleNodeForIndex(indexPath.row) {
             if !node.isKindOfClass(IMGTreeSelectionNode) && !node.isKindOfClass(IMGTreeActionNode) {
                 
@@ -112,7 +112,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
                     restoreCollapsedSection(collapsedSection, animated: true)
                 } else if !node.isChildrenVisible && node.collapsedDepth > collapsedSectionDepth {
                     
-                    let collapsedNode = IMGTreeCollapsedSectionNode(parentNode: node, isVisible: false)
+                    let collapsedNode = IMGTreeCollapsedSectionNode(parentNode: node)
                     insertCollapsedSectionIntoTree(collapsedNode, animated: true)
                     
                 } else {
@@ -127,7 +127,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         }
     }
     
-    func didTriggerActionFromIndex(indexPath: NSIndexPath) {
+    public func didTriggerActionFromIndex(indexPath: NSIndexPath) {
         if let node = tree?.rootNode.visibleNodeForIndex(indexPath.row) {
             if !node.isKindOfClass(IMGTreeActionNode) {
                 transactionInProgress = true

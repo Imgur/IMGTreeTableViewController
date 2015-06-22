@@ -7,48 +7,70 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2431D98C1B34D558003E4540 /* IMGTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FC754F1B349EB000F923BD /* IMGTree.swift */; };
-		2431D98D1B34D558003E4540 /* IMGTreeTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FC75501B349EB000F923BD /* IMGTreeTableController.swift */; };
-		24993F241B32427A007C9124 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24993F231B32427A007C9124 /* UIColorExtensions.swift */; };
-		24A04E531B34C38D00C94693 /* IMGTreeTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 24A04E521B34C38D00C94693 /* IMGTreeTableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		24A04E6E1B34C39E00C94693 /* IMGTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FC754F1B349EB000F923BD /* IMGTree.swift */; };
-		24A04E6F1B34C39E00C94693 /* IMGTreeTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FC75501B349EB000F923BD /* IMGTreeTableController.swift */; };
-		24C3DE8C1AC4B617008E3087 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DE8B1AC4B617008E3087 /* AppDelegate.swift */; };
-		24C3DE8E1AC4B617008E3087 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DE8D1AC4B617008E3087 /* ViewController.swift */; };
-		24C3DE911AC4B617008E3087 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24C3DE8F1AC4B617008E3087 /* Main.storyboard */; };
-		24C3DE931AC4B617008E3087 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C3DE921AC4B617008E3087 /* Images.xcassets */; };
-		24C3DEB01AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */; };
-		24FC75561B34A44E00F923BD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24FC75541B34A44E00F923BD /* LaunchScreen.xib */; };
+		24386E5C1B3890BF009DA1A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DE8B1AC4B617008E3087 /* AppDelegate.swift */; };
+		24386E5D1B3890BF009DA1A6 /* IMGSampleTreeConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */; };
+		24386E5E1B3890BF009DA1A6 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24993F231B32427A007C9124 /* UIColorExtensions.swift */; };
+		24386E5F1B3890BF009DA1A6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3DE8D1AC4B617008E3087 /* ViewController.swift */; };
+		24386E8E1B3890E7009DA1A6 /* IMGTreeTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 24386E8D1B3890E7009DA1A6 /* IMGTreeTableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		24386EA01B3890E7009DA1A6 /* IMGTreeTableView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24386E891B3890E7009DA1A6 /* IMGTreeTableView.framework */; };
+		24386EA11B3890E7009DA1A6 /* IMGTreeTableView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 24386E891B3890E7009DA1A6 /* IMGTreeTableView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		24386EAA1B3890FA009DA1A6 /* IMGTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24386EA81B3890FA009DA1A6 /* IMGTree.swift */; };
+		24386EAB1B3890FA009DA1A6 /* IMGTreeTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24386EA91B3890FA009DA1A6 /* IMGTreeTableController.swift */; };
+		24386EAE1B3894F5009DA1A6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24FC75541B34A44E00F923BD /* LaunchScreen.xib */; };
+		24386EAF1B3894F8009DA1A6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24C3DE8F1AC4B617008E3087 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		24386E9E1B3890E7009DA1A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 24C3DE7E1AC4B617008E3087 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 24386E881B3890E7009DA1A6;
+			remoteInfo = IMGTreeTableView;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		24386E551B38901D009DA1A6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				24386EA11B3890E7009DA1A6 /* IMGTreeTableView.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		24386E121B389007009DA1A6 /* IMGTreeTableView Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IMGTreeTableView Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		24386E891B3890E7009DA1A6 /* IMGTreeTableView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IMGTreeTableView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		24386E8C1B3890E7009DA1A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		24386E8D1B3890E7009DA1A6 /* IMGTreeTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGTreeTableView.h; sourceTree = "<group>"; };
+		24386EA81B3890FA009DA1A6 /* IMGTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGTree.swift; sourceTree = "<group>"; };
+		24386EA91B3890FA009DA1A6 /* IMGTreeTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGTreeTableController.swift; sourceTree = "<group>"; };
 		24993F231B32427A007C9124 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
-		24A04E4E1B34C38D00C94693 /* IMGTreeTableView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IMGTreeTableView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		24A04E511B34C38D00C94693 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		24A04E521B34C38D00C94693 /* IMGTreeTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IMGTreeTableView.h; path = IMGTreeTableView/IMGTreeTableView.h; sourceTree = "<group>"; };
-		24A04E601B34C38E00C94693 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		24A04E611B34C38E00C94693 /* IMGTreeTableViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IMGTreeTableViewTests.m; sourceTree = "<group>"; };
-		24C3DE861AC4B617008E3087 /* IMGTreeTableView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IMGTreeTableView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24C3DE8A1AC4B617008E3087 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24C3DE8B1AC4B617008E3087 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		24C3DE8D1AC4B617008E3087 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		24C3DE901AC4B617008E3087 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		24C3DE921AC4B617008E3087 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		24C3DEAF1AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGSampleTreeConstructor.swift; sourceTree = "<group>"; };
-		24FC754F1B349EB000F923BD /* IMGTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IMGTree.swift; path = IMGTreeTableView/IMGTree.swift; sourceTree = "<group>"; };
-		24FC75501B349EB000F923BD /* IMGTreeTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IMGTreeTableController.swift; path = IMGTreeTableView/IMGTreeTableController.swift; sourceTree = "<group>"; };
 		24FC75551B34A44E00F923BD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		24A04E4A1B34C38D00C94693 /* Frameworks */ = {
+		24386E0F1B389007009DA1A6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24386EA01B3890E7009DA1A6 /* IMGTreeTableView.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		24C3DE831AC4B617008E3087 /* Frameworks */ = {
+		24386E851B3890E7009DA1A6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -58,28 +80,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		24A04E501B34C38D00C94693 /* Supporting Files */ = {
+		24386E8A1B3890E7009DA1A6 /* IMGTreeTableView */ = {
 			isa = PBXGroup;
 			children = (
-				24A04E511B34C38D00C94693 /* Info.plist */,
+				24386EA81B3890FA009DA1A6 /* IMGTree.swift */,
+				24386EA91B3890FA009DA1A6 /* IMGTreeTableController.swift */,
+				24386E8D1B3890E7009DA1A6 /* IMGTreeTableView.h */,
+				24386E8B1B3890E7009DA1A6 /* Supporting Files */,
 			);
-			name = "Supporting Files";
 			path = IMGTreeTableView;
 			sourceTree = "<group>";
 		};
-		24A04E5E1B34C38E00C94693 /* IMGTreeTableViewTests */ = {
+		24386E8B1B3890E7009DA1A6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				24A04E611B34C38E00C94693 /* IMGTreeTableViewTests.m */,
-				24A04E5F1B34C38E00C94693 /* Supporting Files */,
-			);
-			path = IMGTreeTableViewTests;
-			sourceTree = "<group>";
-		};
-		24A04E5F1B34C38E00C94693 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				24A04E601B34C38E00C94693 /* Info.plist */,
+				24386E8C1B3890E7009DA1A6 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -87,9 +102,8 @@
 		24C3DE7D1AC4B617008E3087 = {
 			isa = PBXGroup;
 			children = (
-				24FC754E1B349E9B00F923BD /* IMGTreeTableView */,
 				24C3DE881AC4B617008E3087 /* IMGTreeTableViewDemo */,
-				24A04E5E1B34C38E00C94693 /* IMGTreeTableViewTests */,
+				24386E8A1B3890E7009DA1A6 /* IMGTreeTableView */,
 				24C3DE871AC4B617008E3087 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,8 +111,8 @@
 		24C3DE871AC4B617008E3087 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				24C3DE861AC4B617008E3087 /* IMGTreeTableView.app */,
-				24A04E4E1B34C38D00C94693 /* IMGTreeTableView.framework */,
+				24386E121B389007009DA1A6 /* IMGTreeTableView Demo.app */,
+				24386E891B3890E7009DA1A6 /* IMGTreeTableView.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -126,39 +140,47 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		24FC754E1B349E9B00F923BD /* IMGTreeTableView */ = {
-			isa = PBXGroup;
-			children = (
-				24A04E521B34C38D00C94693 /* IMGTreeTableView.h */,
-				24FC754F1B349EB000F923BD /* IMGTree.swift */,
-				24FC75501B349EB000F923BD /* IMGTreeTableController.swift */,
-				24A04E501B34C38D00C94693 /* Supporting Files */,
-			);
-			name = IMGTreeTableView;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		24A04E4B1B34C38D00C94693 /* Headers */ = {
+		24386E861B3890E7009DA1A6 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24A04E531B34C38D00C94693 /* IMGTreeTableView.h in Headers */,
+				24386E8E1B3890E7009DA1A6 /* IMGTreeTableView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		24A04E4D1B34C38D00C94693 /* IMGTreeTableView */ = {
+		24386E111B389007009DA1A6 /* IMGTreeTableView Demo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 24A04E671B34C38E00C94693 /* Build configuration list for PBXNativeTarget "IMGTreeTableView" */;
+			buildConfigurationList = 24386E2E1B389007009DA1A6 /* Build configuration list for PBXNativeTarget "IMGTreeTableView Demo" */;
 			buildPhases = (
-				24A04E491B34C38D00C94693 /* Sources */,
-				24A04E4A1B34C38D00C94693 /* Frameworks */,
-				24A04E4B1B34C38D00C94693 /* Headers */,
-				24A04E4C1B34C38D00C94693 /* Resources */,
+				24386E0E1B389007009DA1A6 /* Sources */,
+				24386E0F1B389007009DA1A6 /* Frameworks */,
+				24386E101B389007009DA1A6 /* Resources */,
+				24386E551B38901D009DA1A6 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				24386E9F1B3890E7009DA1A6 /* PBXTargetDependency */,
+			);
+			name = "IMGTreeTableView Demo";
+			productName = "IMGTreeTableView Demo";
+			productReference = 24386E121B389007009DA1A6 /* IMGTreeTableView Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		24386E881B3890E7009DA1A6 /* IMGTreeTableView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 24386EA21B3890E7009DA1A6 /* Build configuration list for PBXNativeTarget "IMGTreeTableView" */;
+			buildPhases = (
+				24386E841B3890E7009DA1A6 /* Sources */,
+				24386E851B3890E7009DA1A6 /* Frameworks */,
+				24386E861B3890E7009DA1A6 /* Headers */,
+				24386E871B3890E7009DA1A6 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -166,25 +188,8 @@
 			);
 			name = IMGTreeTableView;
 			productName = IMGTreeTableView;
-			productReference = 24A04E4E1B34C38D00C94693 /* IMGTreeTableView.framework */;
+			productReference = 24386E891B3890E7009DA1A6 /* IMGTreeTableView.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		24C3DE851AC4B617008E3087 /* IMGTreeTableView Demo */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 24C3DEA51AC4B617008E3087 /* Build configuration list for PBXNativeTarget "IMGTreeTableView Demo" */;
-			buildPhases = (
-				24C3DE821AC4B617008E3087 /* Sources */,
-				24C3DE831AC4B617008E3087 /* Frameworks */,
-				24C3DE841AC4B617008E3087 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "IMGTreeTableView Demo";
-			productName = SwiftTreeTable;
-			productReference = 24C3DE861AC4B617008E3087 /* IMGTreeTableView.app */;
-			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
@@ -195,11 +200,11 @@
 				LastUpgradeCheck = 0620;
 				ORGANIZATIONNAME = "Geoff MacDonald";
 				TargetAttributes = {
-					24A04E4D1B34C38D00C94693 = {
+					24386E111B389007009DA1A6 = {
 						CreatedOnToolsVersion = 6.3.2;
 					};
-					24C3DE851AC4B617008E3087 = {
-						CreatedOnToolsVersion = 6.2;
+					24386E881B3890E7009DA1A6 = {
+						CreatedOnToolsVersion = 6.3.2;
 					};
 				};
 			};
@@ -216,56 +221,61 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				24A04E4D1B34C38D00C94693 /* IMGTreeTableView */,
-				24C3DE851AC4B617008E3087 /* IMGTreeTableView Demo */,
+				24386E111B389007009DA1A6 /* IMGTreeTableView Demo */,
+				24386E881B3890E7009DA1A6 /* IMGTreeTableView */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		24A04E4C1B34C38D00C94693 /* Resources */ = {
+		24386E101B389007009DA1A6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24386EAE1B3894F5009DA1A6 /* LaunchScreen.xib in Resources */,
+				24386EAF1B3894F8009DA1A6 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		24C3DE841AC4B617008E3087 /* Resources */ = {
+		24386E871B3890E7009DA1A6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24C3DE911AC4B617008E3087 /* Main.storyboard in Resources */,
-				24FC75561B34A44E00F923BD /* LaunchScreen.xib in Resources */,
-				24C3DE931AC4B617008E3087 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		24A04E491B34C38D00C94693 /* Sources */ = {
+		24386E0E1B389007009DA1A6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24A04E6E1B34C39E00C94693 /* IMGTree.swift in Sources */,
-				24A04E6F1B34C39E00C94693 /* IMGTreeTableController.swift in Sources */,
+				24386E5C1B3890BF009DA1A6 /* AppDelegate.swift in Sources */,
+				24386E5D1B3890BF009DA1A6 /* IMGSampleTreeConstructor.swift in Sources */,
+				24386E5E1B3890BF009DA1A6 /* UIColorExtensions.swift in Sources */,
+				24386E5F1B3890BF009DA1A6 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		24C3DE821AC4B617008E3087 /* Sources */ = {
+		24386E841B3890E7009DA1A6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2431D98C1B34D558003E4540 /* IMGTree.swift in Sources */,
-				2431D98D1B34D558003E4540 /* IMGTreeTableController.swift in Sources */,
-				24C3DE8E1AC4B617008E3087 /* ViewController.swift in Sources */,
-				24C3DE8C1AC4B617008E3087 /* AppDelegate.swift in Sources */,
-				24993F241B32427A007C9124 /* UIColorExtensions.swift in Sources */,
-				24C3DEB01AC4CA8A008E3087 /* IMGSampleTreeConstructor.swift in Sources */,
+				24386EAB1B3890FA009DA1A6 /* IMGTreeTableController.swift in Sources */,
+				24386EAA1B3890FA009DA1A6 /* IMGTree.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		24386E9F1B3890E7009DA1A6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 24386E881B3890E7009DA1A6 /* IMGTreeTableView */;
+			targetProxy = 24386E9E1B3890E7009DA1A6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		24C3DE8F1AC4B617008E3087 /* Main.storyboard */ = {
@@ -287,16 +297,46 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		24A04E681B34C38E00C94693 /* Debug */ = {
+		24386E2F1B389007009DA1A6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/IMGTreeTableViewDemo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		24386E301B389007009DA1A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/IMGTreeTableViewDemo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		24386EA31B3890E7009DA1A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -304,30 +344,31 @@
 				);
 				INFOPLIST_FILE = IMGTreeTableView/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		24A04E691B34C38E00C94693 /* Release */ = {
+		24386EA41B3890E7009DA1A6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = IMGTreeTableView/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -414,64 +455,30 @@
 			};
 			name = Release;
 		};
-		24C3DEA61AC4B617008E3087 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/IMGTreeTableView-bwuvwxqbhljoxxevwbukwpezaskv/Build/Products/Debug-iphonesimulator",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/IMGTreeTableViewDemo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = IMGTreeTableView;
-			};
-			name = Debug;
-		};
-		24C3DEA71AC4B617008E3087 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/IMGTreeTableView-bwuvwxqbhljoxxevwbukwpezaskv/Build/Products/Debug-iphonesimulator",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/IMGTreeTableViewDemo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = IMGTreeTableView;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		24A04E671B34C38E00C94693 /* Build configuration list for PBXNativeTarget "IMGTreeTableView" */ = {
+		24386E2E1B389007009DA1A6 /* Build configuration list for PBXNativeTarget "IMGTreeTableView Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				24A04E681B34C38E00C94693 /* Debug */,
-				24A04E691B34C38E00C94693 /* Release */,
+				24386E2F1B389007009DA1A6 /* Debug */,
+				24386E301B389007009DA1A6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+		};
+		24386EA21B3890E7009DA1A6 /* Build configuration list for PBXNativeTarget "IMGTreeTableView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				24386EA31B3890E7009DA1A6 /* Debug */,
+				24386EA41B3890E7009DA1A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		24C3DE811AC4B617008E3087 /* Build configuration list for PBXProject "IMGTreeTableView" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				24C3DEA31AC4B617008E3087 /* Debug */,
 				24C3DEA41AC4B617008E3087 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		24C3DEA51AC4B617008E3087 /* Build configuration list for PBXNativeTarget "IMGTreeTableView Demo" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				24C3DEA61AC4B617008E3087 /* Debug */,
-				24C3DEA71AC4B617008E3087 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
