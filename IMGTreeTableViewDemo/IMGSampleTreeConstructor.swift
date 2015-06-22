@@ -51,7 +51,7 @@ class IMGSampleTreeConstructor: NSObject, IMGTreeConstructorDelegate {
     func sampleComments(depth: Int) -> [IMGCommentModel]? {
         //make up some comments for some depth
         var comments: [IMGCommentModel] = []
-        for i in 0..< sampleSiblings {
+        for i in 0..<sampleSiblings {
             let comment = IMGCommentModel()
             comment.comment = "\(depth)     \(i+1)"
             if depth < sampleDepth {
