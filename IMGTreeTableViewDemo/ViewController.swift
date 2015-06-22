@@ -6,19 +6,18 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
     var tree: IMGTree!
     var controller: IMGTreeTableController!
     
-    
     @IBOutlet var tableView: UITableView!
     
-    let backgroundColors = [UIColor.whiteColor(), UIColor.turquoiseColor(), UIColor.greenSeaColor(), UIColor.emeraldColor(), UIColor.nephritisColor(), UIColor.peterRiverColor(), UIColor.belizeHoleColor(), UIColor.amethystColor(), UIColor.wisteriaColor(), UIColor.wetAsphaltColor()]
+    let backgroundColors = [UIColor.turquoiseColor(), UIColor.greenSeaColor(), UIColor.emeraldColor(), UIColor.nephritisColor(), UIColor.peterRiverColor(), UIColor.belizeHoleColor(), UIColor.amethystColor(), UIColor.wisteriaColor(), UIColor.wetAsphaltColor(), UIColor.midnightBlueColor()]
     
     // MARK: Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.backgroundColor = .turquoiseColor()
+        tableView.backgroundColor = .greenSeaColor()
         tableView.delegate = self
         tableView.tintColor = UIColor.whiteColor()
-        view.backgroundColor = .turquoiseColor()
+        view.backgroundColor = .greenSeaColor()
         
         let construction = IMGSampleTreeConstructor()
         tree = construction.sampleCommentTree()
