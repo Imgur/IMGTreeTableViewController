@@ -47,7 +47,7 @@
 /* Begin PBXFileReference section */
 		24386E121B389007009DA1A6 /* IMGTreeTableView Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IMGTreeTableView Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		24386E891B3890E7009DA1A6 /* IMGTreeTableView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IMGTreeTableView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		24386E8C1B3890E7009DA1A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		24386E8C1B3890E7009DA1A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = IMGTreeTableView/Info.plist; sourceTree = "<group>"; };
 		24386E8D1B3890E7009DA1A6 /* IMGTreeTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGTreeTableView.h; sourceTree = "<group>"; };
 		24386EA81B3890FA009DA1A6 /* IMGTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGTree.swift; sourceTree = "<group>"; };
 		24386EA91B3890FA009DA1A6 /* IMGTreeTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGTreeTableController.swift; sourceTree = "<group>"; };
