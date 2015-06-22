@@ -10,12 +10,12 @@
     "Jasdev Singh": "jasdev@imgur.com"
   },
   "summary": "A composable, arbitrarly deeply nested table view controller. Ideal for nested comments",
-  "homepage": "https://github.com/imgur/IMGTreeTableView",
+  "homepage": "https://github.com/imgur/IMGTreeTableViewController",
   "platforms": {
-    "ios": "7.0"
+    "ios": "8.0"
   },
   "source": {
-    "git": "https://github.com/imgur/IMGTreeTableView.git",
+    "git": "https://github.com/imgur/IMGTreeTableViewController.git",
     "tag": "0.1.0"
   },
   "source_files": "IMGTreeTableView/*.swift",
