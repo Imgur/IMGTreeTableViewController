@@ -9,31 +9,31 @@
 import UIKit
 
 /**
-    Defines methods a controller should implement to feed UITableViewCell's to the IMGTreeTableController
+Defines methods a controller should implement to feed UITableViewCell's to the IMGTreeTableController
 */
 @objc public protocol IMGTreeTableControllerDelegate {
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
 }
 
 /**
-    This class is to be used with its tableview convenience methods to modify the contained IMGTree and alter the UITableView
+This class is to be used with its tableview convenience methods to modify the contained IMGTree and alter the UITableView
 */
 public class IMGTreeTableController: NSObject, UITableViewDataSource{
-
+    
     /**
-        Delegate conformance is required for constructing table view cells to use representing the nodes in the tree
+    Delegate conformance is required for constructing table view cells to use representing the nodes in the tree
     */
     private weak var delegate: IMGTreeTableControllerDelegate!
     /**
-        Tableview this controller controls upon convenience methods
+    Tableview this controller controls upon convenience methods
     */
     private weak var tableView: UITableView!
     /**
-        The depth at which the controller will collapse intermediate (up to root) subtrees exposing only the selected cell's subtree
+    The depth at which the controller will collapse intermediate (up to root) subtrees exposing only the selected cell's subtree
     */
     var collapsedSectionDepth = 3
     /**
-        The tree representing the node tree displayed in the tableview. Can be nil, in which case the tableview is cleared at anytime.
+    The tree representing the node tree displayed in the tableview. Can be nil, in which case the tableview is cleared at anytime.
     */
     public var tree: IMGTree? {
         didSet {
@@ -46,7 +46,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     }
     
     /**
-        Is the tableview currently being manipulated?
+    Is the tableview currently being manipulated?
     */
     private var transactionInProgress: Bool {
         didSet {
@@ -59,20 +59,20 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         }
     }
     /**
-        The nodes that are being inserted by some action
+    The nodes that are being inserted by some action
     */
     private var insertedNodes: [IMGTreeNode] = []
     /**
-        The nodes that are being deleted by some action
+    The nodes that are being deleted by some action
     */
     private var deletedNodes: [IMGTreeNode] = []
     
     /**
-        The currently selected node. There can only be one by design.
+    The currently selected node. There can only be one by design.
     */
     private var selectionNode: IMGTreeSelectionNode?
     /**
-        The currently actionable node. There can only be one by design.
+    The currently actionable node. There can only be one by design.
     */
     private var actionNode: IMGTreeActionNode?
     
@@ -84,7 +84,11 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         transactionInProgress = false
         super.init()
         tableView.dataSource = self
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "visibilityChanged:", name: "isVisibleChanged", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "visibilityChanged:", name: IMGVisibilityNotificationName, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: IMGVisibilityNotificationName, object: nil)
     }
     
     //MARK: Public
@@ -134,6 +138,23 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
                 addActionNode(node)
                 transactionInProgress = false
             }
+        }
+    }
+    
+    public func nodeFor(indexPath: NSIndexPath) -> IMGTreeNode? {
+        
+        if let node = tree?.rootNode.visibleNodeForIndex(indexPath.row) {
+            return node
+        }
+        return nil
+    }
+    
+    public func hideActionNode () {
+        if let currentActionNode = actionNode {
+            transactionInProgress = true
+            //hide previous selection node
+            actionNode?.removeFromParent()
+            transactionInProgress = false
         }
     }
     
@@ -215,18 +236,18 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     }
     
     private func addSelectionNodeIfNecessary(parentNode: IMGTreeNode) -> Bool {
-
+        
         if !parentNode.isSelected{
             let needsChildToggling = parentNode.isSelectionNodeInVisibleTraversal() || parentNode.isChildrenVisible
             
-            if self.selectionNode != nil {
+            if selectionNode != nil {
                 //hide previous selection node
-                self.selectionNode?.removeFromParent()
+                selectionNode?.removeFromParent()
             }
             
-            self.selectionNode = IMGTreeSelectionNode(parentNode: parentNode)
-            parentNode.addChild(self.selectionNode!)
-            self.selectionNode?.isVisible = true
+            selectionNode = IMGTreeSelectionNode(parentNode: parentNode)
+            parentNode.addChild(selectionNode!)
+            selectionNode?.isVisible = true
             
             return !needsChildToggling
         } else {
@@ -236,15 +257,15 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     
     private func addActionNode(parentNode: IMGTreeNode) {
         
-        if self.actionNode != nil {
+        if actionNode != nil {
             
             //hide previous selection node
-            self.actionNode?.removeFromParent()
+            actionNode?.removeFromParent()
         }
         
-        self.actionNode = IMGTreeActionNode(parentNode: parentNode)
-        parentNode.addChild(self.actionNode!)
-        self.actionNode?.isVisible = true
+        actionNode = IMGTreeActionNode(parentNode: parentNode)
+        parentNode.addChild(actionNode!)
+        actionNode?.isVisible = true
     }
     
     func visibilityChanged(notification: NSNotification!) {
@@ -280,11 +301,10 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         }
         tableView.deleteRowsAtIndexPaths(deletedIndices, withRowAnimation: .Top)
         
-        
         tableView.endUpdates()
     }
     
-
+    
     //MARK: UITableViewDataSource
     
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
