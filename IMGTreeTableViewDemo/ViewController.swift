@@ -34,19 +34,17 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
     
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UITableViewCell
+        cell.accessoryType = .None
         switch node {
         case let commentNode as IMGCommentNode:
             cell.textLabel?.text = commentNode.comment
-            cell.accessoryType = .None
         case is IMGTreeSelectionNode:
             cell.textLabel?.text = "selection"
             cell.accessoryType = .DetailButton
         case is IMGTreeActionNode:
             cell.textLabel?.text = "action"
-            cell.accessoryType = .DetailButton
         case is IMGTreeCollapsedSectionNode:
             cell.textLabel?.text = "collapsed"
-            cell.accessoryType = .None
         default:
             break
         }
