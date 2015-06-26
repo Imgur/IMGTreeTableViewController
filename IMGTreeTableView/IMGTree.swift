@@ -19,8 +19,6 @@ This protocol allows a given class to fully configure an IMGTree instance with a
     func classForNode() -> IMGTreeNode.Type
 }
 
-let IMGVisibilityNotificationName = "isVisibleChanged"
-
 /**
 Provides structure to a nested object graph such that it can be used in a UITableView or UICollectionView
 */
@@ -115,9 +113,24 @@ Represents an individual node which in turn represents a model object in a graph
 public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     
     /**
+    The controller that owns
+    */
+    weak var controller: IMGTreeTableController? {
+        didSet {
+            // recursive
+            for node in children {
+                node.controller = controller
+            }
+        }
+    }
+    /**
     The super node that owns this instance as part of it's children
     */
-    weak var parentNode: IMGTreeNode?
+    weak var parentNode: IMGTreeNode? {
+        didSet {
+            controller = parentNode?.controller
+        }
+    }
     /**
     This node's children nodes
     */
@@ -125,6 +138,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         didSet {
             children = children.map({ (var node: IMGTreeNode) -> IMGTreeNode in
                 node.parentNode = self
+                node.controller = self.controller
                 return node
             })
         }
@@ -190,6 +204,21 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         }
     }
     /**
+    Does this node contain model object children (selectable cells)
+    */
+    var containsSelectableChildren: Bool {
+        get {
+            if children.count > 0{
+                for node in children {
+                    if !(node.isKindOfClass(IMGTreeSelectionNode.self) || node.isKindOfClass(IMGTreeActionNode.self) || node.isKindOfClass(IMGTreeCollapsedSectionNode.self)){
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+    }
+    /**
     Find the nodes root node if it is attached to the tree
     */
     var rootNode: IMGTreeNode {
@@ -246,7 +275,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         didSet {
             if isVisible != oldValue {
                 //inform of change in visibility
-                NSNotificationCenter.defaultCenter().postNotificationName(IMGVisibilityNotificationName, object: self)
+                controller?.visibilityChangedForNode(self)
             }
         }
     }
@@ -289,9 +318,9 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     /**
     Add the child node to the node as a child. If its a special node, it is inserted at the top.
     */
-    func addChild(child: IMGTreeNode) {
-        if child.isKindOfClass(IMGTreeSelectionNode) || child.isKindOfClass(IMGTreeCollapsedSectionNode) {
-            children.insert(child, atIndex: 0)
+    func addChild(child: IMGTreeNode, toIndex:Int? = nil) {
+        if toIndex != nil  {
+            children.insert(child, atIndex: toIndex!)
         } else {
             children += [child]
         }
@@ -408,7 +437,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     /**
     The infix traversal of the subtree, visible or not
     */
-    private func infixTraversal(visible: Bool = true) -> [IMGTreeNode] {
+    internal func infixTraversal(visible: Bool = true) -> [IMGTreeNode] {
         
         var traversal = { (childNodes: [IMGTreeNode]) -> [IMGTreeNode] in
             var traversal: [IMGTreeNode] = []
@@ -463,6 +492,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     
     public func copyWithZone(zone: NSZone) -> AnyObject {
         let nodeCopy = self.dynamicType(parentNode: parentNode!)
+        nodeCopy.controller = controller
         nodeCopy.isVisible = isVisible
         nodeCopy.parentNode = parentNode
         nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in
@@ -566,7 +596,7 @@ public class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
         var indices: [NSIndexPath] = []
         isVisible = true
         anchorNode.children = []
-        anchorNode.addChild(self)
+        anchorNode.addChild(self, toIndex: 0)
         indices.append(NSIndexPath(forRow: visibleTraversalIndex()!, inSection: 0))
         addChild(originatingNode)
         originatingNode.isVisible = true
