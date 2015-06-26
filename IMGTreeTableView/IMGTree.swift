@@ -22,7 +22,7 @@ This protocol allows a given class to fully configure an IMGTree instance with a
 /**
 Provides structure to a nested object graph such that it can be used in a UITableView or UICollectionView
 */
-public class IMGTree: NSObject, NSCoding {
+public class IMGTree: NSObject, NSCoding, NSCopying {
     
     /**
     Defines the root node which is never displayed on screen but contains the top level nodes
@@ -31,6 +31,10 @@ public class IMGTree: NSObject, NSCoding {
     
     public override init() {
         rootNode = IMGTreeNode()
+    }
+    
+    init(rootNode: IMGTreeNode) {
+        self.rootNode = rootNode
     }
     
     //MARK: tree construction class methods
@@ -90,6 +94,18 @@ public class IMGTree: NSObject, NSCoding {
     
     public func encodeWithCoder(aCoder: NSCoder) {
         
+    }
+    
+    //MARK: NSCopying
+    
+    public func copyWithZone(zone: NSZone) -> AnyObject {
+        let treeCopy = IMGTree()
+        var rootNodes: [IMGTreeNode] = []
+        for node in rootNode.children {
+            rootNodes.append(node.copy() as! IMGTreeNode)
+        }
+        treeCopy.rootNode.children = rootNodes
+        return treeCopy
     }
     
     //MARK: DebugPrintable
@@ -264,9 +280,8 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     var isVisible: Bool = false {
         willSet {
             //keep track of prior subtree visibility
-            previousVisibleIndex = visibleTraversalIndex()
             if isVisible {
-                
+                previousVisibleIndex = visibleTraversalIndex()
                 previousVisibleChildren = visibleIndicesForTraversal()
             } else {
                 previousVisibleChildren = []
