@@ -28,6 +28,10 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         controller.tree = tree
+        
+        //zoom to a bottom node
+//        let node = tree.rootNode.children[1].children[2].children[1].children[2].children[0].children[2].children[1]
+//        controller.zoomTo(node)
     }
     
     // MARK: IMGTreeTableControllerDelegate

@@ -27,7 +27,7 @@ public class IMGTree: NSObject, NSCoding, NSCopying {
     /**
         Defines the root node which is never displayed on screen but contains the top level nodes
     */
-    let rootNode: IMGTreeNode
+    public let rootNode: IMGTreeNode
     
     public override init() {
         rootNode = IMGTreeNode()
@@ -145,7 +145,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     /**
         This node's children nodes
     */
-    var children: [IMGTreeNode] = [] {
+    public var children: [IMGTreeNode] = [] {
         didSet {
             children = children.map({ (var node: IMGTreeNode) -> IMGTreeNode in
                 node.parentNode = self
