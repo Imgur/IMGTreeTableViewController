@@ -9,31 +9,35 @@
 import UIKit
 
 /**
-Defines methods a controller should implement to feed UITableViewCell's to the IMGTreeTableController
+    Defines methods a controller should implement to feed UITableViewCell's to the IMGTreeTableController
 */
 @objc public protocol IMGTreeTableControllerDelegate {
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell
 }
 
 /**
-This class is to be used with its tableview convenience methods to modify the contained IMGTree and alter the UITableView
+    This class is to be used with its tableview convenience methods to modify the contained IMGTree and alter the UITableView
 */
 public class IMGTreeTableController: NSObject, UITableViewDataSource{
     
     /**
-    Delegate conformance is required for constructing table view cells to use representing the nodes in the tree
+        Delegate conformance is required for constructing table view cells to use representing the nodes in the tree
     */
     private weak var delegate: IMGTreeTableControllerDelegate!
     /**
-    Tableview this controller controls upon convenience methods
+        Tableview this controller controls upon convenience methods
     */
     private weak var tableView: UITableView!
     /**
-    The depth at which the controller will collapse intermediate (up to root) subtrees exposing only the selected cell's subtree
+        The depth at which the controller will collapse intermediate (up to root) subtrees exposing only the selected cell's subtree
     */
     var collapsedSectionDepth = 3
     /**
-    The tree representing the node tree displayed in the tableview. Can be nil, in which case the tableview is cleared at anytime.
+        Does the controller leave a selection node on the last collapsed node?
+    */
+    var leavesSelectionOnCollapse = false
+    /**
+        The tree representing the node tree displayed in the tableview. Can be nil, in which case the tableview is cleared at anytime.
     */
     public var tree: IMGTree? {
         didSet {
@@ -49,7 +53,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     }
     
     /**
-    Is the tableview currently being manipulated?
+        Is the tableview currently being manipulated?
     */
     public var transactionInProgress: Bool {
         didSet {
@@ -62,28 +66,23 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         }
     }
     /**
-    The nodes that are being inserted by some action
+        The nodes that are being inserted by some action
     */
     private var insertedNodes: [IMGTreeNode] = []
     /**
-    The nodes that are being deleted by some action
+        The nodes that are being deleted by some action
     */
     private var deletedNodes: [IMGTreeNode] = []
     /**
     The nodes that are being deleted by some action
     */
-    private weak var pivotNode: IMGTreeNode? {
-        didSet {
-            pivotNode?.previousVisibleIndex = pivotNode?.visibleTraversalIndex()
-        }
-    }
     
     /**
-    The selected node. There can only be one by design.
+        The selected node. There can only be one by design.
     */
     private var selectionNode: IMGTreeSelectionNode?
     /**
-    The actionable node. There can only be one by design.
+        The actionable node. There can only be one by design.
     */
     private var actionNode: IMGTreeActionNode?
     
@@ -103,9 +102,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         
         if !visibility {
             for child in reverse(parentNode.children) {
-                if !child.isKindOfClass(IMGTreeSelectionNode) {
-                    child.isVisible = visibility
-                }
+                child.isVisible = visibility
             }
         } else {
             for child in parentNode.children {
@@ -118,20 +115,33 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         if let node = tree?.rootNode.visibleNodeForIndex(indexPath.row) {
             if !node.isKindOfClass(IMGTreeSelectionNode) && !node.isKindOfClass(IMGTreeActionNode) {
                 
+                //disable using the cache, only for table view height performance
+                tree?.rootNode.preventCacheUse = true
                 if let collapsedSection = node as? IMGTreeCollapsedSectionNode {
                     restoreCollapsedSection(collapsedSection, animated: true)
-                } else if !node.isChildrenVisible && node.collapsedDepth > collapsedSectionDepth && !node.children.isEmpty  {
+                } else if !node.isChildrenVisible && node.collapsedDepth > collapsedSectionDepth && node.containsSelectableChildren  {
                     
                     let collapsedNode = IMGTreeCollapsedSectionNode(parentNode: node)
                     insertCollapsedSectionIntoTree(collapsedNode, animated: true)
                     
                 } else {
                     
+                    if let pivotIndex = node.visibleTraversalIndex() {
+                        //will the node be expanded or are we just selecting to focus?
+                        if node.isChildrenVisible {
+                            node.isChildrenVisibleOverride = !node.isSelected
+                        } else {
+                            node.isChildrenVisibleOverride = true
+                        }
+                        //to reflect the state of the pivot node, we need to reload *after* the tree has been set in case the cell needs to check if it is expanded or not
+                        tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: pivotIndex, inSection: 0)], withRowAnimation: .Fade)
+                        node.isChildrenVisibleOverride = nil
+                    }
+                    
                     transactionInProgress = true
-                    //we need to reload the parent node to reflect the expanded state
-                    pivotNode = node
                     if addSelectionNodeIfNecessary(node) {
                         setNodeChildrenVisiblility(node, visibility: !node.isChildrenVisible)
+                        removeSelectionNodeIfNecessary(node)
                     }
                     transactionInProgress = false
                 }
@@ -159,6 +169,9 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     
     public func nodeFor(indexPath: NSIndexPath) -> IMGTreeNode? {
         
+        if let cached = tree?.rootNode.visibleInfixCache {
+            return cached[indexPath.row]
+        }
         if let node = tree?.rootNode.visibleNodeForIndex(indexPath.row) {
             return node
         }
@@ -178,6 +191,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
             transactionInProgress = true
             //hide previous selection node
             actionNode?.removeFromParent()
+            actionNode = nil
             transactionInProgress = false
         }
     }
@@ -194,7 +208,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     }
     
     public func zoomTo(node: IMGTreeNode) {
-        
+        //TODO: implementation
     }
     
     public func addNode(newNode: IMGTreeNode, parentNode: IMGTreeNode, toIndex: Int) {
@@ -224,6 +238,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
             let firstDeleteIndex = collapsedNode.anchorNode.visibleTraversalIndex()! + 1
             tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: firstDeleteIndex, inSection: 0)], withRowAnimation: animationStyle)
         }
+
         
         //delete rows collapsed section will hide
         let nodesToHide = collapsedNode.nodesToBeHidden
@@ -231,14 +246,17 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         for internalNode in reverse(nodesToHide) {
             internalNode.isVisible = false
         }
+        
         assert(nodesToHide.count == nodeIndicesToHide.count, "deleted nodes and indices count not equivalent")
         var indices: [NSIndexPath] = []
         nodeIndicesToHide.enumerateIndexesUsingBlock({ (rowIndex: NSInteger, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
             indices.append(NSIndexPath(forRow: rowIndex, inSection: 0))
         })
         
-        assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) - nodesToHide.count, "during collapsed section insertion: deleted nodes and indices count not equivalent")
+        assert(tree!.rootNode.visibleTraversalCount == tableView.numberOfRowsInSection(0) - nodesToHide.count, "during collapsed section insertion: deleted nodes and indices count not equivalent")
+        tree?.rootNode.preventCacheUse = false
         tableView.deleteRowsAtIndexPaths(indices, withRowAnimation: animationStyle)
+        tree?.rootNode.preventCacheUse = true
         
         var indicesToShow = collapsedNode.insertCollapsedSectionIntoTree()
         
@@ -249,7 +267,8 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         let lastIndice = indicesToShow.last!
         indicesToShow.append(NSIndexPath(forRow: lastIndice.row + 1, inSection: 0))
         
-        assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) + indicesToShow.count, "during collapsed section insertion: inserted nodes and indices count not equivalent")
+        assert(tree!.rootNode.visibleTraversalCount == tableView.numberOfRowsInSection(0) + indicesToShow.count, "during collapsed section insertion: inserted nodes and indices count not equivalent")
+        tree?.rootNode.preventCacheUse = false
         tableView.insertRowsAtIndexPaths(indicesToShow, withRowAnimation: animationStyle)
         
         //scroll to top
@@ -268,8 +287,10 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         
         //delete  the containing nodes of the bottom node
         let nodeIndicesToHide = collapsedNode.indicesForContainingNodes
-        assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) - nodeIndicesToHide.count, "during collapsed section restore: deleted nodes and indices count not equivalent")
+        assert(tree!.rootNode.visibleTraversalCount == tableView.numberOfRowsInSection(0) - nodeIndicesToHide.count, "during collapsed section restore: deleted nodes and indices count not equivalent")
+        tree?.rootNode.preventCacheUse = false
         tableView.deleteRowsAtIndexPaths(nodeIndicesToHide, withRowAnimation: animationStyle)
+        tree?.rootNode.preventCacheUse = true
         
         //restore old nodes
         var needsSelection = false
@@ -292,27 +313,41 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
             actionNode = priorAction
         }
         
-        assert(tree!.rootNode.visibleTraversalCount() == tableView.numberOfRowsInSection(0) + nodeIndicesToShow.count, "during collapsed section restore: inserted nodes and indices count not equivalent")
+        assert(tree!.rootNode.visibleTraversalCount == tableView.numberOfRowsInSection(0) + nodeIndicesToShow.count, "during collapsed section restore: inserted nodes and indices count not equivalent")
+        tree?.rootNode.preventCacheUse = false
         tableView.insertRowsAtIndexPaths(nodeIndicesToShow, withRowAnimation: animationStyle)
     }
     
     private func addSelectionNodeIfNecessary(parentNode: IMGTreeNode) -> Bool {
-        
-        if !parentNode.isSelected{
-            let needsChildToggling = parentNode.isSelectionNodeInVisibleTraversal() || parentNode.isChildrenVisible
+
+        if !parentNode.isSelected {
+            //if true, all we are doing is adding the selection cell, not expanding or manipulating the tree
+            let needsChildToggling = parentNode.isSelectionNodeInTraversal() || parentNode.isChildrenVisible
             
             if selectionNode != nil {
                 //hide previous selection node
-                selectionNode?.removeFromParent()
+                selectionNode!.removeFromParent()
             }
             
             selectionNode = IMGTreeSelectionNode(parentNode: parentNode)
             parentNode.addChild(selectionNode!, toIndex: 0)
-            selectionNode?.isVisible = true
+            
+            if needsChildToggling {
+                //set visible, because otherwise, children are not expanded (selection node is child to this node)
+                selectionNode?.isVisible = true
+            }
             
             return !needsChildToggling
-        } else {
-            return true
+        }
+        return true
+    }
+    
+    private func removeSelectionNodeIfNecessary(parentNode: IMGTreeNode) {
+        if selectionNode != nil && !parentNode.isSelected {
+            
+            //hide previous selection node
+            selectionNode?.removeFromParent()
+            selectionNode = nil
         }
     }
     
@@ -321,7 +356,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         if actionNode != nil {
             
             //hide previous selection node
-            actionNode?.removeFromParent()
+            actionNode!.removeFromParent()
         }
         
         actionNode = IMGTreeActionNode(parentNode: parentNode)
@@ -332,10 +367,6 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     private func commit() {
         
         tableView.beginUpdates()
-        
-        if let pivotIndex = pivotNode?.previousVisibleIndex {
-            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: pivotIndex, inSection: 0)], withRowAnimation: .None)
-        }
         
         var addedIndices: [AnyObject] = []
         for node in insertedNodes {
@@ -358,9 +389,12 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         }
         tableView.deleteRowsAtIndexPaths(deletedIndices, withRowAnimation: .Top)
         
+        //enable cache again for speed during heightForRow
+        tree?.rootNode.preventCacheUse = false
         tableView.endUpdates()
     }
-    
+
+
     //MARK: UITableViewDataSource
     
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -369,6 +403,6 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     }
     
     public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tree?.rootNode.visibleTraversalCount() ?? 0
+        return tree?.rootNode.visibleTraversalCount ?? 0
     }
 }

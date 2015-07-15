@@ -2,30 +2,30 @@
 import UIKit
 
 /**
-This protocol allows a given class to fully configure an IMGTree instance with any given object graph
+    This protocol allows a given class to fully configure an IMGTree instance with any given object graph
 */
 @objc public protocol IMGTreeConstructorDelegate  {
     /**
-    For a given model object instance representing a node, return that objects children if any
+        For a given model object instance representing a node, return that objects children if any
     */
     func childrenForNodeObject(object: AnyObject) -> [AnyObject]?
     /**
-    Configure a node for a given model object
+        Configure a node for a given model object
     */
     func configureNode(node: IMGTreeNode, modelObject: AnyObject)
     /**
-    Return the class type to be used as a node to contain the model object, eg. IMGCommentNode in the sample tree
+        Return the class type to be used as a node to contain the model object, eg. IMGCommentNode in the sample tree
     */
     func classForNode() -> IMGTreeNode.Type
 }
 
 /**
-Provides structure to a nested object graph such that it can be used in a UITableView or UICollectionView
+    Provides structure to a nested object graph such that it can be used in a UITableView or UICollectionView
 */
 public class IMGTree: NSObject, NSCoding, NSCopying {
     
     /**
-    Defines the root node which is never displayed on screen but contains the top level nodes
+        Defines the root node which is never displayed on screen but contains the top level nodes
     */
     let rootNode: IMGTreeNode
     
@@ -40,7 +40,7 @@ public class IMGTree: NSObject, NSCoding, NSCopying {
     //MARK: tree construction class methods
     
     /**
-    Creates a new instance of IMGTree given the root level model objects and constructor object conforming to IMGTreeConstructorDelegate
+        Creates a new instance of IMGTree given the root level model objects and constructor object conforming to IMGTreeConstructorDelegate
     */
     public class func tree(fromRootArray rootArray: [AnyObject], withConstructerDelegate constructorDelegate: IMGTreeConstructorDelegate) -> IMGTree
     {
@@ -90,10 +90,11 @@ public class IMGTree: NSObject, NSCoding, NSCopying {
     
     required convenience public init(coder aDecoder: NSCoder) {
         self.init()
+        //TODO: implementation
     }
     
     public func encodeWithCoder(aCoder: NSCoder) {
-        
+        //TODO: implementation
     }
     
     //MARK: NSCopying
@@ -112,35 +113,29 @@ public class IMGTree: NSObject, NSCoding, NSCopying {
     
     public override var description : String {
         //print readable string
-        var tableState = "Tree: rootnode: \(rootNode.description)\n"
-        
-        for node in rootNode.infixTraversal() {
-            tableState += "\(node.description)\n"
-        }
-        
-        return tableState
+        return "Tree with \(numNodes()) nodes"
     }
 }
 
 
 /**
-Represents an individual node which in turn represents a model object in a graph. Conforms to NSCopying in order to copy into subtree properties
+    Represents an individual node which in turn represents a model object in a graph. Conforms to NSCopying in order to copy into subtree properties
 */
 public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     
     /**
-    The controller that owns
+        The controller that owns
     */
     weak var controller: IMGTreeTableController? {
         didSet {
-            // recursive
+            // recursive 
             for node in children {
                 node.controller = controller
             }
         }
     }
     /**
-    The super node that owns this instance as part of it's children
+        The super node that owns this instance as part of it's children
     */
     weak var parentNode: IMGTreeNode? {
         didSet {
@@ -148,7 +143,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         }
     }
     /**
-    This node's children nodes
+        This node's children nodes
     */
     var children: [IMGTreeNode] = [] {
         didSet {
@@ -160,7 +155,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         }
     }
     /**
-    Is this node selected by the user?
+        Is this node selected by the user?
     */
     var isSelected: Bool {
         get {
@@ -173,7 +168,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         }
     }
     /**
-    The depth of this node in the treee as calculated by recursively calling the parent node.
+        The depth of this node in the treee as calculated by recursively calling the parent node.
     */
     public var depth: Int {
         var currentNode: IMGTreeNode = self
@@ -187,7 +182,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         return depth
     }
     /**
-    The depth of this node up until the first collapsed section ancestor
+        The depth of this node up until the first collapsed section ancestor
     */
     var collapsedDepth: Int {
         var currentNode: IMGTreeNode = self
@@ -201,32 +196,28 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         return depth
     }
     /**
-    Is this node's children visible?
+        Is this node's children visible?
     */
     var isChildrenVisible: Bool {
         get {
-            if children.count > 0{
-                if children.first!.isKindOfClass(IMGTreeSelectionNode) {
-                    if children.count > 1 {
-                        return children[1].isVisible
-                    } else {
-                        return false
-                    }
-                } else {
-                    return children[0].isVisible
-                }
+            if isChildrenVisibleOverride != nil {
+                return isChildrenVisibleOverride!
+            }
+            if children.count > 0 {
+                return children.first!.isVisible
             }
             return false
         }
     }
+    var isChildrenVisibleOverride: Bool?
     /**
     Does this node contain model object children (selectable cells)
     */
     var containsSelectableChildren: Bool {
         get {
-            if children.count > 0{
+            if children.count > 0 {
                 for node in children {
-                    if !(node.isKindOfClass(IMGTreeSelectionNode.self) || node.isKindOfClass(IMGTreeActionNode.self) || node.isKindOfClass(IMGTreeCollapsedSectionNode.self)){
+                    if !(node.isKindOfClass(IMGTreeSelectionNode.self) || node.isKindOfClass(IMGTreeActionNode.self)){
                         return true
                     }
                 }
@@ -235,7 +226,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         }
     }
     /**
-    Find the nodes root node if it is attached to the tree
+        Find the nodes root node if it is attached to the tree
     */
     var rootNode: IMGTreeNode {
         get {
@@ -249,7 +240,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         }
     }
     /**
-    The anchor node represents the top node in its subtree which is usually the rootnode if the subtree has not been detached.
+        The anchor node represents the top node in its subtree which is usually the rootnode if the subtree has not been detached.
     */
     var anchorNode: IMGTreeNode {
         get {
@@ -275,7 +266,13 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         }
     }
     /**
-    Is the node visible within the tree?
+        Finds the number of visible child nodes
+    */
+    var visibleTraversalCount: Int {
+        return infixTraversal().count ?? 0
+    }
+    /**
+        Is the node visible within the tree?
     */
     var isVisible: Bool = false {
         willSet {
@@ -295,22 +292,22 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         }
     }
     /**
-    What was the nodes previous visible index before the start of the transaction
+        What was the nodes previous visible index before the start of the transaction
     */
     var previousVisibleIndex: Int?
     /**
-    What was the nodes previous visible childrenw before the start of the transaction
+        What was the nodes previous visible childrenw before the start of the transaction
     */
     var previousVisibleChildren: [NSIndexPath]?
     
     //MARK: Initializers
     
     override init() {
-        
+        //needs to be declared to allow root node to be initialized even though this is an NSObject
     }
     
     /**
-    Initialize under a parent node invisibily
+        Initialize under a parent node invisibily
     */
     public required init (parentNode nodesParent: IMGTreeNode) {
         super.init()
@@ -331,7 +328,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     //MARK: Public
     
     /**
-    Add the child node to the node as a child. If its a special node, it is inserted at the top.
+        Add the child node to the node as a child. If its a special node, it is inserted at the top.
     */
     func addChild(child: IMGTreeNode, toIndex:Int? = nil) {
         if toIndex != nil  {
@@ -343,7 +340,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     }
     
     /**
-    Remove a child.
+        Remove a child.
     */
     func removeChild(child: IMGTreeNode) {
         if let targetIndex = find(children, child) {
@@ -352,7 +349,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     }
     
     /**
-    Removes this instance from its current parent node, effectively detaching from the tree
+        Removes this instance from its current parent node, effectively detaching from the tree
     */
     func removeFromParent() {
         isVisible = false
@@ -373,7 +370,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     }
     
     /**
-    Finds the location, if any, of the node with this instances children regardless of visibility
+        Finds the location, if any, of the node with this instances children regardless of visibility
     */
     func indexForNode(node: IMGTreeNode) -> Int? {
         var traversal = infixTraversal(visible: false)
@@ -381,18 +378,11 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     }
     
     /**
-    Finds the location, if any, of the node with this instances visible children
+        Finds the location, if any, of the node with this instances visible children
     */
     func visibleIndexForNode(node: IMGTreeNode) -> Int? {
         var traversal = infixTraversal()
         return find(traversal, node)
-    }
-    
-    /**
-    Finds the number of visible child nodes
-    */
-    func visibleTraversalCount() -> Int {
-        return infixTraversal().count ?? 0
     }
     
     /**
@@ -403,7 +393,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     }
     
     /**
-    Retrieves the visible node at the specified index, if any.
+        Retrieves the visible node at the specified index, if any.
     */
     func visibleNodeForIndex(index: Int) -> IMGTreeNode? {
         let traversal = rootNode.infixTraversal()
@@ -411,14 +401,14 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     }
     
     /**
-    Retrieves this instances index among the parents visible nodes, if any.
+        Retrieves this instances index among the parents visible nodes, if any.
     */
     func visibleTraversalIndex() -> Int? {
         return rootNode.visibleIndexForNode(self)
     }
     
     /**
-    Retrieves an array of indices of its visible children
+        Retrieves an array of indices of its visible children
     */
     func visibleIndicesForTraversal() -> [NSIndexPath] {
         let traversal = infixTraversal()
@@ -428,10 +418,10 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     }
     
     /**
-    Does there exist a user selection within any of this nodes subtree
+        Does there exist a user selection within any of this nodes subtree
     */
-    func isSelectionNodeInVisibleTraversal() -> Bool {
-        let traversal = infixTraversal()
+    func isSelectionNodeInTraversal(visible: Bool? = true) -> Bool {
+        let traversal = infixTraversal(visible: visible!)
         for node in traversal {
             if node.isKindOfClass(IMGTreeSelectionNode) {
                 return true
@@ -443,16 +433,16 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     //MARK: Private
     
     /**
-    This instances index from the rootnode regardless of visibility.
+        This instances index from the rootnode regardless of visibility.
     */
     private func traversalIndex() -> Int? {
         return rootNode.indexForNode(self)
     }
     
     /**
-    The infix traversal of the subtree, visible or not
+        The infix traversal of the subtree, visible or not
     */
-    internal func infixTraversal(visible: Bool = true) -> [IMGTreeNode] {
+    func infixTraversal(visible: Bool = true) -> [IMGTreeNode] {
         
         var traversal = { (childNodes: [IMGTreeNode]) -> [IMGTreeNode] in
             var traversal: [IMGTreeNode] = []
@@ -460,7 +450,9 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
                 traversal.append(node)
                 traversal.extend(node.infixTraversal(visible: visible))
             }
-            
+            if visible && self.rootNode == self && !self.preventCacheUse {
+                self.visibleInfixCache = traversal
+            }
             return traversal
         }
         
@@ -473,9 +465,23 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
             return traversal(children)
         }
     }
-    
     /**
-    Finds a child node of the specificed class
+    Prevents the traversal cache from being used.
+    */
+    var preventCacheUse = false {
+        didSet {
+            if preventCacheUse == false {
+                //clear the cache
+                visibleInfixCache = nil
+            }
+        }
+    }
+    /**
+    Caches the traversal. Currently only used on the root node
+    */
+    var visibleInfixCache: [IMGTreeNode]?
+    /**
+        Finds a child node of the specificed class
     */
     private func findChildNode(ofClass: AnyClass) -> IMGTreeNode? {
         let filtered = children.filter({ (node) -> Bool in
@@ -486,7 +492,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     }
     
     /**
-    Finds a child node in the visible of the specificed class
+        Finds a child node in the visible of the specificed class
     */
     private func findTraversalNode(ofClass: AnyClass) -> IMGTreeNode? {
         let traversal = infixTraversal()
@@ -500,7 +506,11 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     //MARK: DebugPrintable
     
     public override var description : String {
-        return "Node: \(rootNode.visibleIndexForNode(self)!) \n"
+        if parentNode != nil {
+            
+            return "Node: \(visibleTraversalIndex()) \n"
+        }
+        return "Root Node"
     }
     
     //MARK: NSCopying
@@ -518,36 +528,36 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
 }
 
 /**
-Class for nodes that represent user 'selection' of a parent node
+    Class for nodes that represent user 'selection' of a parent node
 */
 public class IMGTreeSelectionNode : IMGTreeNode {
     
 }
 
 /**
-Class for nodes that represent actionables things on the parent
+    Class for nodes that represent actionables things on the parent
 */
 public class IMGTreeActionNode : IMGTreeNode {
     
 }
 
 /**
-Class for nodes that represent collapsed sections
+    Class for nodes that represent collapsed sections
 */
 public class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     /**
-    The anchor or top level node this collapsed node is ancestor to
+        The anchor or top level node this collapsed node is ancestor to
     */
     override var anchorNode: IMGTreeNode {
         return originatingNode.collapsedAnchorNode
     }
     /**
-    The node that this node was triggered from
+        The node that this node was triggered from
     */
     let originatingNode: IMGTreeNode
     /**
-    The original anchors subtree
+        The original anchors subtree
     */
     private let originalAnchorNode: IMGTreeNode
     
@@ -581,7 +591,7 @@ public class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
         let rowsDeleted = NSMutableIndexSet()
         
         var firstRemovalIndex = anchorNode.visibleTraversalIndex()! + 1
-        var removeRange = anchorNode.visibleTraversalCount()
+        var removeRange = anchorNode.visibleTraversalCount
         
         rowsDeleted.addIndexesInRange(NSMakeRange(firstRemovalIndex, removeRange))
         
@@ -609,12 +619,13 @@ public class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     func insertCollapsedSectionIntoTree() -> [NSIndexPath] {
         var indices: [NSIndexPath] = []
-        isVisible = true
         anchorNode.children = []
         anchorNode.addChild(self, toIndex: 0)
+        isVisible = true
         indices.append(NSIndexPath(forRow: visibleTraversalIndex()!, inSection: 0))
         addChild(originatingNode)
         originatingNode.isVisible = true
+        
         indices.append(NSIndexPath(forRow: originatingNode.visibleTraversalIndex()!, inSection: 0))
         for child in originatingNode.children {
             child.isVisible = true
@@ -636,7 +647,7 @@ public class IMGTreeCollapsedSectionNode : IMGTreeNode, NSCopying {
     
     //MARK: NSCopying
     
-    public override  func copyWithZone(zone: NSZone) -> AnyObject {
+   public override  func copyWithZone(zone: NSZone) -> AnyObject {
         var nodeCopy = self.dynamicType(parentNode: originatingNode)
         nodeCopy.isVisible = isVisible
         nodeCopy.children = children.map({ (childNode: IMGTreeNode) -> IMGTreeNode in

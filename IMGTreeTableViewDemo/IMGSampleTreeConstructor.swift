@@ -30,7 +30,7 @@ class IMGCommentModel : NSObject {
 
 class IMGSampleTreeConstructor: NSObject, IMGTreeConstructorDelegate {
     
-    let sampleDepth = 7
+    let sampleDepth = 8
     let sampleSiblings = 3
     
     func sampleCommentTree() -> IMGTree {
