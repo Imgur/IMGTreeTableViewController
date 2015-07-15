@@ -8,6 +8,7 @@ IMGTreeTableView
  - 'Actionable' cell, used as a comment reply cell in Imgur, only exists in one location
  - 'Selectable' cell, used as a comment actions panel in Imgur, only exists in one location
  - Animated transitions during collapse or comment expanson, never reloading
+ - Allows zooming to a particular node
  
 ## Configuration
 
