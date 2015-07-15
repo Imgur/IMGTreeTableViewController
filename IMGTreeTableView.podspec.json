@@ -1,6 +1,6 @@
 {
   "name": "IMGTreeTableView",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -16,7 +16,7 @@
   },
   "source": {
     "git": "https://github.com/imgur/IMGTreeTableViewController.git",
-    "tag": "0.1.0"
+    "tag": "0.2.0"
   },
   "source_files": "IMGTreeTableView/*.swift",
   "requires_arc": true
