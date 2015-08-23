@@ -373,7 +373,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         Finds the location, if any, of the node with this instances children regardless of visibility
     */
     func indexForNode(node: IMGTreeNode) -> Int? {
-        var traversal = infixTraversal(false)
+        let traversal = infixTraversal(false)
         return traversal.indexOf(node)
     }
     

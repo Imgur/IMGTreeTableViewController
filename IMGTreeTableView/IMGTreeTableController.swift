@@ -158,7 +158,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     }
     
     public func hideActionNode () {
-        if let currentActionNode = actionNode {
+        if let _ = actionNode {
             transactionInProgress = true
             //hide previous selection node
             actionNode?.removeFromParent()
