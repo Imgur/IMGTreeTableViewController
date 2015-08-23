@@ -37,7 +37,7 @@ class ViewController: UIViewController, IMGTreeTableControllerDelegate, UITableV
     // MARK: IMGTreeTableControllerDelegate
     
     func cell(node: IMGTreeNode, indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) 
         cell.accessoryType = .None
         switch node {
         case let commentNode as IMGCommentNode:

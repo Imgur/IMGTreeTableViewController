@@ -9,7 +9,7 @@
 import UIKit
 import IMGTreeTableView
 
-class IMGCommentNode: IMGTreeNode, NSCopying {
+class IMGCommentNode: IMGTreeNode {
     var comment: String?
     
     override var description : String {
