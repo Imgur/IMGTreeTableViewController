@@ -444,7 +444,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
     */
     func infixTraversal(visible: Bool = true) -> [IMGTreeNode] {
         
-        var traversal = { (childNodes: [IMGTreeNode]) -> [IMGTreeNode] in
+        let traversal = { (childNodes: [IMGTreeNode]) -> [IMGTreeNode] in
             var traversal: [IMGTreeNode] = []
             for node in childNodes {
                 traversal.append(node)
@@ -457,7 +457,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
         }
         
         if visible {
-            var childNodes = children.filter({ (node: IMGTreeNode) -> Bool in
+            let childNodes = children.filter({ (node: IMGTreeNode) -> Bool in
                 return node.isVisible
             })
             return traversal(childNodes)
