@@ -413,7 +413,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
                 addedIndices.append(indexPath)
             }
-            addedIndices.extend(node.visibleIndicesForTraversal() as [NSIndexPath])
+            addedIndices.appendContentsOf(node.visibleIndicesForTraversal() as [NSIndexPath])
         }
         
         var deletedIndices: [NSIndexPath] = []
@@ -422,7 +422,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
                 deletedIndices.append(indexPath)
             }
-            deletedIndices.extend(node.previousVisibleChildren! as [NSIndexPath])
+            deletedIndices.appendContentsOf(node.previousVisibleChildren! as [NSIndexPath])
         }
         
         if !disableAnimation {
