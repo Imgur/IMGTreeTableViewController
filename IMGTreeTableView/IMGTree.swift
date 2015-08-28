@@ -448,7 +448,7 @@ public class IMGTreeNode: NSObject, NSCoding, NSCopying {
             var traversal: [IMGTreeNode] = []
             for node in childNodes {
                 traversal.append(node)
-                traversal.extend(node.infixTraversal(visible))
+                traversal.appendContentsOf(node.infixTraversal(visible))
             }
             if visible && self.rootNode == self && !self.preventCacheUse {
                 self.visibleInfixCache = traversal
@@ -572,7 +572,7 @@ public class IMGTreeCollapsedSectionNode : IMGTreeNode {
     var indicesForContainingNodes: [NSIndexPath] {
         var rowsToHide: [NSIndexPath] = []
         
-        rowsToHide.extend(originatingNode.visibleIndicesForTraversal())
+        rowsToHide.appendContentsOf(originatingNode.visibleIndicesForTraversal())
         originatingNode.children.map({ (child: IMGTreeNode) -> IMGTreeNode in
             child.isVisible = false
             return child
