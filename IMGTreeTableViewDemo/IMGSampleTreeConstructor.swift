@@ -9,7 +9,7 @@
 import UIKit
 import IMGTreeTableView
 
-class IMGCommentNode: IMGTreeNode, NSCopying {
+class IMGCommentNode: IMGTreeNode {
     var comment: String?
     
     override var description : String {
@@ -17,7 +17,7 @@ class IMGCommentNode: IMGTreeNode, NSCopying {
     }
     
     override func copyWithZone(zone: NSZone) -> AnyObject {
-        var copy = super.copyWithZone(zone) as! IMGCommentNode
+        let copy = super.copyWithZone(zone) as! IMGCommentNode
         copy.comment = comment
         return copy
     }

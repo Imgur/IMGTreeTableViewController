@@ -104,7 +104,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     func setNodeChildrenVisiblility(parentNode: IMGTreeNode, visibility: Bool) {
         
         if !visibility {
-            for child in reverse(parentNode.children) {
+            for child in Array(parentNode.children.reverse()) {
                 child.isVisible = visibility
             }
         } else {
@@ -158,7 +158,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     }
     
     public func hideActionNode () {
-        if let currentActionNode = actionNode {
+        if let _ = actionNode {
             transactionInProgress = true
             //hide previous selection node
             actionNode?.removeFromParent()
@@ -168,7 +168,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
     }
     
     public func nodePassingTest(test: (node: IMGTreeNode) -> Bool) -> IMGTreeNode? {
-        if let traversal = tree?.rootNode.infixTraversal(visible: false) {
+        if let traversal = tree?.rootNode.infixTraversal(false) {
             for node in traversal {
                 if test(node: node) {
                     return node
@@ -185,13 +185,13 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         var currentNode = node
         var selectedNodes: [IMGTreeNode] = []
         while currentNode.parentNode != nil {
-            var selectedNode = currentNode.parentNode!
+            let selectedNode = currentNode.parentNode!
             selectedNodes.append(selectedNode)
             currentNode = selectedNode
         }
         
         disableAnimation = true
-        for selectedNode in reverse(selectedNodes) {
+        for selectedNode in Array(selectedNodes.reverse()) {
             didSelectNode(selectedNode)
         }
         disableAnimation = false
@@ -270,7 +270,7 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
         //delete rows collapsed section will hide
         let nodesToHide = collapsedNode.nodesToBeHidden
         let nodeIndicesToHide = collapsedNode.indicesToBeHidden
-        for internalNode in reverse(nodesToHide) {
+        for internalNode in Array(nodesToHide.reverse()) {
             internalNode.isVisible = false
         }
         
@@ -406,23 +406,23 @@ public class IMGTreeTableController: NSObject, UITableViewDataSource{
             tableView.beginUpdates()
         }
         
-        var addedIndices: [AnyObject] = []
+        var addedIndices: [NSIndexPath] = []
         for node in insertedNodes {
             
             if let rowIndex = node.visibleTraversalIndex() {
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
                 addedIndices.append(indexPath)
             }
-            addedIndices.extend(node.visibleIndicesForTraversal() as [AnyObject])
+            addedIndices.appendContentsOf(node.visibleIndicesForTraversal() as [NSIndexPath])
         }
         
-        var deletedIndices: [AnyObject] = []
+        var deletedIndices: [NSIndexPath] = []
         for node in deletedNodes {
             if let rowIndex = node.previousVisibleIndex {
                 let indexPath = NSIndexPath(forRow: rowIndex, inSection: 0)
                 deletedIndices.append(indexPath)
             }
-            deletedIndices.extend(node.previousVisibleChildren! as [AnyObject])
+            deletedIndices.appendContentsOf(node.previousVisibleChildren! as [NSIndexPath])
         }
         
         if !disableAnimation {
